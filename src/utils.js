@@ -15,10 +15,16 @@ export function getChildrenfromProps(props){
 }
 
 export function setAttribute(node,props){
-    Object.keys(props).forEach(propsName => {
-        if(propsName==='children'){
+    Object.keys(props).forEach(propName => {
+        if(propName==='children'){
             return
         }
-        node.setAttribute(propsName,props[propsName])
+        if(propName==='className'){
+            node.setAttribute('class',props[propName])
+        }
+        if(propName==='style'){
+            
+        }
+        node.setAttribute(propName,props[propName])
     });
 }
