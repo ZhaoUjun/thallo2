@@ -17,7 +17,12 @@ export class DomComponent {
         this.node=document.createElement(type);
         this.renderedChildren=children.map(instantiateComponent);
         this.renderedChildren
-            .map(child=>child.mount())
+            .map(child=>{
+                if(typeof child==='string'){
+                    return document.createTextNode(child)
+                }
+                return child.mount()
+            })
             .map(childNode=>this.node.appendChild(childNode))
         setAttribute(this.node,props);
         return this.node
