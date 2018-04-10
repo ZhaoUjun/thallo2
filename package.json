@@ -1,0 +1,20 @@
+{
+  "name": "thallo",
+  "version": "1.0.0",
+  "description": "an react-like framework",
+  "main": ".src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "react",
+    "react-like",
+    "front-end framework"
+  ],
+  "author": "zhaorujun@gmail.com",
+  "license": "MIT",
+  "devDependencies": {
+    "babel": "^6.23.0",
+    "webpack": "^4.5.0"
+  }
+}
