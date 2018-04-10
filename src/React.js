@@ -1,8 +1,8 @@
 /**
  * 
  */
-export function createElement (type,props,...children){
-    props.children=children;
+export function createElement (type,props,...args){
+    props.children=Array.from(args);
     return {type,props}
 }
 
