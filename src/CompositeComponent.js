@@ -1,7 +1,7 @@
 import { instantiateComponent } from './instantiateComponent'
 import { isClass } from './utils'
 
-export class CompositeComponnet {
+export class CompositeComponent {
     constructor(element){
         this.currentElement=element;
         this.publicInstance=null;
