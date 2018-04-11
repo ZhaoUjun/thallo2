@@ -3,24 +3,27 @@ import * as ReactDom from './ReactDom'
 export function createElement (type,props,...args){
     const  children=Array.from(args)
     const  mergeProps=props?Object.assign(props,{children}):{children};
-    console.log(mergeProps)
     return {type,props:mergeProps}
 }
 
-class Component {
+export class Component {
     constructor(props,context){
         this.context = context;
         this.props = props;
         this.refs = {};
         this.state = null;
-        this.isReactComponent=true;
     }
 
+    get isReactComponent(){
+        return true
+    }
+
+    
 }
 
 
 
 export default{
     createElement,
-    ReactDom
+    ReactDom,
 }
