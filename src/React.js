@@ -3,6 +3,7 @@ import * as ReactDom from './ReactDom'
 export function createElement (type,props,...args){
     const  children=Array.from(args)
     const  mergeProps=props?Object.assign(props,{children}):{children};
+    console.log(mergeProps)
     return {type,props:mergeProps}
 }
 

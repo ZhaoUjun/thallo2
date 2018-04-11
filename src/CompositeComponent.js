@@ -1,5 +1,5 @@
 import { instantiateComponent } from './instantiateComponent'
-import { isClass } from './utils'
+import { isClass, getChildrenfromProps } from './utils'
 
 export class CompositeComponent {
     constructor(element){

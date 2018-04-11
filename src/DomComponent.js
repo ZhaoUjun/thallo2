@@ -1,4 +1,5 @@
-import { getChildrenfromProps,setAttribute } from './utils'
+import { getChildrenfromProps } from './utils'
+import { setAttribute } from './DomProperty'
 import { instantiateComponent } from './instantiateComponent'
 export class DomComponent {
     constructor(element){
