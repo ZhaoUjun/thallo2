@@ -1,3 +1,7 @@
+export function isFuntion (obj){
+    return typeof obj ==='function'
+}
+
 export function isClass (elementType){
     return (
         Boolean(elementType.prototype) &&
@@ -27,4 +31,8 @@ export function setAttribute(node,props){
         }
         node.setAttribute(propName,props[propName])
     });
+}
+
+export function defer(fn){
+    
 }

@@ -1,4 +1,7 @@
 import * as ReactDom from './ReactDom'
+import { isFuntion } from './utils'
+import { EMPTY_OBJ } from './constant'
+import { putIntoQueue } from './render-queue'
 
 export function createElement (type,props,...args){
     const  children=Array.from(args)
@@ -8,7 +11,7 @@ export function createElement (type,props,...args){
 
 export class Component {
     constructor(props,context){
-        this.context = context;
+        this.context = context||EMPTY_OBJ;
         this.props = props;
         this.refs = {};
         this.state = null;
@@ -18,6 +21,15 @@ export class Component {
         return true
     }
 
+    setState(state,callback){
+        if(state){
+            (this._pendingStates = this._pendingStates || []).push(state)
+        }
+        if(callback){
+            (this._callbackQueue = this._callbackQueue || []).push(callback)
+        }
+        putIntoQueue(this)
+    }
     
 }
 
