@@ -2,6 +2,7 @@ import * as ReactDom from './ReactDom'
 import { isFuntion } from './utils'
 import { EMPTY_OBJ } from './constant'
 import { putIntoQueue } from './render-queue'
+import { resolveTxt } from 'dns';
 
 export function createElement (type,props,...args){
     const  children=Array.from(args)
@@ -29,6 +30,15 @@ export class Component {
             (this._callbackQueue = this._callbackQueue || []).push(callback)
         }
         putIntoQueue(this)
+    }
+
+    getState(){
+        let collector={};
+        let s;
+        while((s =this._pendingStates.pop())){
+            collector={...collector,...isFuntion(s)?s.call(this,this.state,this.props):s}
+        }
+        return {...this.state,...collector}
     }
     
 }
