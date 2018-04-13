@@ -1,9 +1,9 @@
 import React from './React';
-import {Button} from './test'
+import {Button,Test} from './test'
 window.React=React
 // console.log(<Button/>)
 
 React.ReactDom.render(
-    <Button/>  
+    <Test color='red'/>  
     ,document.getElementById('root')
 )

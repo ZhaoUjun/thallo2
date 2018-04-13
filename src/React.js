@@ -9,16 +9,16 @@ export function createElement (type,props,...args){
 export class Component {
     constructor(props,context){
         this.context = context;
-        this.props = props;
+        this.props = props || {};
+        this.state = this.state || {};
         this.refs = {};
-        this.state = null;
     }
 
     get isReactComponent(){
         return true
     }
 
-    
+
 }
 
 
