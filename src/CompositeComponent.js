@@ -1,6 +1,6 @@
 import { instantiateComponent } from './instantiateComponent'
 import { isClass, getChildrenfromProps } from './utils'
-
+import { reRendercomponent } from './update'
 export class CompositeComponent {
     constructor(element){
         this.currentElement=element;
@@ -29,5 +29,9 @@ export class CompositeComponent {
         }
         this.renderedComponent=instantiateComponent(renderedElement);
         return this.renderedComponent.mount()
+    }
+
+    update(previous,current){
+        reRendercomponent(previous,this)
     }
 }
