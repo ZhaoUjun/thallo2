@@ -1,5 +1,14 @@
+import { EMPTY_OBJ } from '../constant'
 export function isFuntion (obj){
     return typeof obj ==='function'
+}
+
+export function isString(string){
+    return typeof string ==='string'
+}
+
+export function isUndefined(obj){
+    return typeof obj ==='undefined'
 }
 
 export function isClass (elementType){
@@ -11,6 +20,10 @@ export function isClass (elementType){
 
 export function isArray (obj){
     return Array.isArray(obj)
+}
+
+export function isRef(ref){
+    return ref||(ref!==null&&ref!==undefined)
 }
 
 export function getChildrenfromProps(props){
@@ -33,6 +46,13 @@ export function setAttribute(node,props){
     });
 }
 
-export function defer(fn){
-    
+export function isComponent (instance){
+    return instance.isReactComponent === EMPTY_OBJ
+  }
+  
+
+export function defer(fun,...args){
+    fun=isFuntion(fun)?fun.bind(null,...args):fun;
+    const deferer=requestAnimationFrame||setTimeout;
+    return deferer(fun)
 }

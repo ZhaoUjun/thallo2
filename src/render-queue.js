@@ -1,16 +1,16 @@
 import { updateComponent } from './updater'
+import { renderQueue } from './top'
+import { defer } from './utils'
 
-const queue=[];
-
-export function putIntoQueue (component){
-    if(!component._dirty&&(component._dirty=true)&&queue.push(component)){
-        
+export function enterQueue (component){
+    if(!component._dirty&&(component._dirty=true)&&renderQueue.push(component)){
+        defer(flushQueue)
     }
 }
 
 function flushQueue (){
     let c;
-    while((c=queue.pop())){
+    while((c=renderQueue.pop())){
         if(!c._dirty){
             updateComponent(c)
         }

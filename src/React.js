@@ -3,19 +3,24 @@ import { isFuntion } from './utils'
 import { EMPTY_OBJ } from './constant'
 import { putIntoQueue } from './render-queue'
 import { resolveTxt } from 'dns';
+import createElement from './createElement'
 
-export function createElement (type,props,...args){
-    const  children=Array.from(args)
-    const  mergeProps=props?Object.assign(props,{children}):{children};
-    return {type,props:mergeProps}
-}
+// export function createElement (type,props,...args){
+//     const  children=Array.from(args)
+//     const  mergeProps=props?Object.assign(props,{children}):{children};
+//     return {type,props:mergeProps}
+// }
 
 export class Component {
+    _canUpdate=true
+    _dirty=true
+    
     constructor(props,context){
         this.context = context||EMPTY_OBJ;
         this.props = props;
         this.refs = {};
     }
+
 
     get isReactComponent(){
         return true

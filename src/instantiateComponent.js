@@ -1,5 +1,7 @@
 import { CompositeComponent } from './CompositeComponent'
 import { DomComponent } from './DomComponent'
+import { NormalComponent } from './NormalComponent'
+import { isClass } from './utils'
 
 export function instantiateComponent (element){
     if(typeof element ==='string'){
@@ -7,7 +9,8 @@ export function instantiateComponent (element){
     }
     const {type}=element;
     if (typeof type==='function'){
-        return new CompositeComponent(element)
+        return isClass(type)? new NormalComponent(element):
+                new NormalComponent(element)
     }
     else if (typeof type==='string'){
         return new DomComponent(element)

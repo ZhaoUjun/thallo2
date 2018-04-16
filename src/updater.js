@@ -6,3 +6,11 @@ export function updateComponent(component,isForce){
     const lastElement=component.currentElement;
     const nextElement=component.render();
 }
+
+export function disableUpdate(component){
+    component._canUpdate=true
+}
+
+export function enableUpdate(component){
+    component._canUpdate=false
+}
