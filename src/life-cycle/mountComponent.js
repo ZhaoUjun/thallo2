@@ -1,20 +1,23 @@
 import { NODE_TAG } from '../constant'
-import { getChildrenfromProps,isClass } from '../utils'
+import { getChildrenfromProps, isClass, isComponent, isFuntion } from '../utils'
+import { CurrentOwner} from '../top'
 
-export function mountComponent(vNode,parentContext,parentComponentp){
-    const children=getChildrenfromProps(vNode.props);
-    let renderedElement;
-    if (isClass(vNode.type)){
-        vNode.publicInstance=new type(vNode.props);
-        if (vNode.publicInstance.componentWillMount){
-            vNode.publicInstance.componentWillMount()
-        }
-        renderedElement=vNode.publicInstance.render();
+export function mountComponent(vNode,parentContext,parentComponent){
+    const {tag,props,type,ref}=vNode;
+    const component=(vNode.component=new type(props,parentContext));
+    if (isComponent(parentComponent)) {
+        component._parentComponent = parentComponent
     }
-    else {
-        vNode.publicInstance=null;
-        renderedElement=vNode.type(vNode.props);
+    if(isFuntion(component.componentWillMount)){
+        component.componentWillMount();
+        component.state=component.getState()
     }
-    vNode.component=instantiateComponent(renderedElement);
-    return vNode.component.mount()
+    CurrentOwner.current=component
+    vNode._rendered=component.render();
+    CurrentOwner.current=null;
+    
+    if(isFuntion(component.componentDidMount)){
+        component.componentDidMount()
+    }
+    
 }
