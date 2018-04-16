@@ -1,4 +1,5 @@
-import { EMPTY_OBJ } from '../constant'
+import { EMPTY_OBJ,NODE_TAG } from '../constant'
+
 export function isFuntion (obj){
     return typeof obj ==='function'
 }
@@ -18,8 +19,20 @@ export function isClass (elementType){
       )
 }
 
+export function isComposite(vNode){
+    return (NODE_TAG.NORMAL_COMPONENT|NODE_TAG.STATELESS)&vNode.tag
+}
+
+export function isStateless(vNode){
+    return vNode.tag&NODE_TAG.STATELESS
+}
+
 export function isArray (obj){
     return Array.isArray(obj)
+}
+
+export function isNotNullOrUndefined(obj){
+    return obj !==undefined && obj !== null
 }
 
 export function isRef(ref){
