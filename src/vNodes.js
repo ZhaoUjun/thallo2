@@ -1,84 +1,85 @@
-import { isClass, getChildrenfromProps } from './utils'
-import { reRendercomponent } from './update'
-import { mountComponent } from './life-cycle/mountComponent'
-import { unmountComponent,unmountHostNode } from './life-cycle/unmountComponent'
-import { NODE_TAG } from './constant'
-import { mountVNode } from './createDomNode'
+import { isClass, getChildrenfromProps } from "./utils";
+import { reRendercomponent } from "./update";
+import { mountComponent } from "./life-cycle/mountComponent";
+import {
+    unmountComponent,
+    unmountHostNode
+} from "./life-cycle/unmountComponent";
+import { NODE_TAG } from "./constant";
+import { mountVNode } from "./createDomNode";
 
 export class NormalComponent {
+    tag = NODE_TAG.NORMAL_COMPONENT;
 
-    tag=NODE_TAG.NORMAL_COMPONENT;
-
-    constructor(element){
-        const {props,type}=element;
-        this.type = type
-        this.name = type.name || type.toString().match(/^function\s*([^\s(]+)/)[1]
-        type.displayName = this.name
-        this._owner = props.owner
-        delete props.owner
+    constructor(element) {
+        const { props, type } = element;
+        this.type = type;
+        this.name =
+            type.name || type.toString().match(/^function\s*([^\s(]+)/)[1];
+        type.displayName = this.name;
+        this._owner = props.owner;
+        delete props.owner;
         if ((this.ref = props.ref)) {
-          delete props.ref
+            delete props.ref;
         }
-        this.props = props
-        this.key = props.key || null
-        this.dom = null
+        this.props = props;
+        this.key = props.key || null;
+        this.dom = null;
     }
 
-    mount(parentContext, parentComponent){
-        return mountComponent(this,parentContext, parentComponent)
+    mount(parentContext, parentComponent) {
+        return mountComponent(this, parentContext, parentComponent);
     }
 
-    update(previous,current){
-        reRendercomponent(previous,this)
+    update(previous, current) {
+        reRendercomponent(previous, this);
     }
 
-    unmount(parentDom){
-        return unmountComponent(this,parentDom)
+    unmount(parentDom) {
+        return unmountComponent(this, parentDom);
     }
 }
 
 export class HostNode {
+    tag = NODE_TAG.NODE;
 
-    tag=NODE_TAG.NODE
-
-    constructor(element){
-        const {props,type}=element;
-        this.type = type
-        this.namespace=props.namespace
-        this._owner = props.owner
-        delete props.owner
+    constructor(element) {
+        const { props, type } = element;
+        this.type = type;
+        this.namespace = props.namespace;
+        this._owner = props.owner;
+        delete props.owner;
         if ((this.ref = props.ref)) {
-            delete props.ref
-          }
-        this.props = props
-        this.key = props.key || null
-        this.dom = null
+            delete props.ref;
+        }
+        this.props = props;
+        this.key = props.key || null;
+        this.dom = null;
     }
 
-    mount(parentContext,parentComponent){
-        return mountVNode(this,parentContext,parentComponent,)
+    mount(parentContext, parentComponent) {
+        return mountVNode(this, parentContext, parentComponent);
     }
 
-    unmount(parentDom){
-        return unmountHostNode(this,parentDom)
+    unmount(parentDom) {
+        return unmountHostNode(this, parentDom);
     }
 }
 
 export class TextNode {
+    tag = NODE_TAG.TEXT;
 
-    tag=NODE_TAG.TEXT
-
-    constructor(element){
-        this.text=element;
-        this.dom=null;
+    constructor(element) {
+        this.text = element;
+        this.dom = null;
     }
 
-    mount(parentContext,parentComponent){
-        const textNode =(this.dom= window.document.createTextNode(this.text));
-        return textNode
+    mount(parentContext, parentComponent) {
+        const textNode = (this.dom = window.document.createTextNode(this.text));
+        return textNode;
     }
 
-    unmount(parentDom){
-        return unmountHostNode(this,parentDom)
+    unmount(parentDom) {
+        return unmountHostNode(this, parentDom);
     }
 }

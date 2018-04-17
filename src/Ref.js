@@ -1,41 +1,44 @@
-import { isComposite,isFunction,isStateless,isString } from './utils'
-import { NODE_TAG } from './constant'
+import { isComposite, isFunction, isStateless, isString } from "./utils";
+import { NODE_TAG } from "./constant";
 
 export default {
-    update (lastVnode, nextVnode, domNode) {
-        const prevRef = lastVnode != null && lastVnode.ref
-        const nextRef = nextVnode != null && nextVnode.ref
-    
+    update(lastVnode, nextVnode, domNode) {
+        const prevRef = lastVnode != null && lastVnode.ref;
+        const nextRef = nextVnode != null && nextVnode.ref;
+
         if (prevRef !== nextRef) {
-            this.detach(lastVnode, prevRef, lastVnode.dom)
-            this.attach(nextVnode, nextRef, domNode)
+            this.detach(lastVnode, prevRef, lastVnode.dom);
+            this.attach(nextVnode, nextRef, domNode);
         }
     },
-    attach (vnode, ref, domNode) {
-        const node = isComposite(vnode) ? vnode.component : domNode
+    attach(vnode, ref, domNode) {
+        const node = isComposite(vnode) ? vnode.component : domNode;
         if (isFunction(ref)) {
-            ref(node)
+            ref(node);
         } else if (isString(ref)) {
-            if (vnode&&vnode.parentVNode&&(vnode.parentVNode.tag&NODE_TAG.STATELESS)){
-                console.warn('statelessComponent do not support refs')
-                return 
+            if (
+                vnode &&
+                vnode.parentVNode &&
+                vnode.parentVNode.tag & NODE_TAG.STATELESS
+            ) {
+                console.warn("statelessComponent do not support refs");
+                return;
             }
-            const inst = vnode._owner
+            const inst = vnode._owner;
             if (inst && isFunction(inst.render)) {
-                inst.refs[ref] = node
+                inst.refs[ref] = node;
             }
-      }
+        }
     },
-    detach (vnode, ref, domNode) {
-      const node=isComposite(vnode)?vnode.component:domNode
+    detach(vnode, ref, domNode) {
+        const node = isComposite(vnode) ? vnode.component : domNode;
         if (isFunction(ref)) {
-            ref(null)
+            ref(null);
         } else if (isString(ref)) {
-            const inst = vnode._owner
+            const inst = vnode._owner;
             if (inst.refs[ref] === node && isFunction(inst.render)) {
-            delete inst.refs[ref]
+                delete inst.refs[ref];
             }
         }
     }
-  }
-  
+};

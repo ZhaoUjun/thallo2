@@ -1,7 +1,7 @@
-export const CurrentOwner={
-    current:null
-}
+export const CurrentOwner = {
+    current: null
+};
 
-export const mountedComponents=[];
+export const mountedComponents = [];
 
-export const renderQueue=[];
+export const renderQueue = [];
