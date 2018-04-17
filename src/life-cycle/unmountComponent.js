@@ -4,7 +4,7 @@ import { getChildrenfromProps, isClass, isComponent, isFunction, isNotNullOrUnde
 // import { CurrentOwner} from '../top'
 // import { createDomNode } from '../createDomNode'
 // import { getChildContext } from '../utils/getChildContext'
-// import Ref from '../Ref'
+import Ref from '../Ref'
 // import { render } from '../ReactDom';
 
 
@@ -14,29 +14,31 @@ export function unmountComponent(vNode,parentDom){
         component.componentWillUnmount()
     }
     _rendered.unmount();
-    removeDom(dom,parentDom)
+    removeDom(vNode,parentDom)
 }
 
 export function unmountHostNode(vNode,parentDom){
     const {dom,props}=vNode;
-    //@todo dettachEvenet dettachRef
-    unmountChildren(getChildrenfromProps(props),parentDom);
-    removeDom(dom,parentDom)
+    unmountChildren(getChildrenfromProps(props),dom);
+    removeDom(vNode,parentDom)
 }
 
 export function unmountTextNode(vNode,parentDom){
-    removeDom(dom,parentDom)
+    removeDom(vNode,parentDom)
 }
 
 function unmountChildren(children,parentDom){
     children.forEach(vNode => {
-        const {dom}=vNode;
-        vNode.unmount&&vNode.unmount();
-        removeDom(dom,parentDom)
+        vNode.unmount&&vNode.unmount(parentDom);
     });
 }
 
-function removeDom(dom,parentDom){
+function removeDom(vNode,parentDom){
+    //@todo dettachEvenet 
+    const { dom,ref } = vNode;
+    if(ref){
+        Ref.detach(vNode,ref,dom)
+    }
     if(dom&&parentDom){
         parentDom.removeChild(dom)
     }
