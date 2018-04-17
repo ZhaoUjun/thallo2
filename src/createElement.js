@@ -1,9 +1,10 @@
 import { CurrentOwner } from './top'
 import { isString,isFunction,isUndefined } from './utils'
+import { NormalComponent, HostNode, TextNode } from './vNodes'
 
-export function instantiateComponent (element){
+export function instantiateVNode (element){
     if(typeof element ==='string'){
-        return element
+        return new TextNode(element)
     }
     const {type}=element;
     if (typeof type==='function'){
@@ -11,7 +12,7 @@ export function instantiateComponent (element){
                 new NormalComponent(element)
     }
     else if (typeof type==='string'){
-        return new DomComponent(element)
+        return new HostNode(element)
     }
 }
 
@@ -37,5 +38,5 @@ function mergeProps(type,props,children){
 
 export default function createElement (type,props,...args){
     const  children=Array.from(args)
-    return instantiateComponent({type,props:mergedProps(type,props,args)})
+    return instantiateVNode({type,props:mergedProps(type,props,args)})
 }

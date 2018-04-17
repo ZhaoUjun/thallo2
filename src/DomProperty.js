@@ -9,7 +9,7 @@ function setNodeStyle (node,styles){
         style[styleName]=styles[styleName];
     }
 }
-export function setAttribute(node,props){
+export function attachAttributes(node,props){
     Object.keys(props).forEach(propName => {
         if(propName==='children'){
             return
