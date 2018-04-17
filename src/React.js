@@ -2,7 +2,6 @@ import * as ReactDom from './ReactDom'
 import { isFuntion } from './utils'
 import { EMPTY_OBJ } from './constant'
 import { putIntoQueue } from './render-queue'
-import { resolveTxt } from 'dns';
 import createElement from './createElement'
 
 // export function createElement (type,props,...args){
@@ -23,7 +22,7 @@ export class Component {
 
 
     get isReactComponent(){
-        return true
+        return EMPTY_OBJ
     }
 
     setState(state,callback){

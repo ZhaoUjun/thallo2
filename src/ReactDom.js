@@ -1,7 +1,6 @@
-import { instantiateComponent } from './instantiateComponent'
+import { createDomNode } from './createDomNode'
 
-export function render(element,container){
-    const componentInstance=instantiateComponent(element);
-    const node = componentInstance.mount();
+export function render(vnode,container){
+    const node = createDomNode(vnode);
     container.appendChild(node);
 }

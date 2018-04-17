@@ -1,5 +1,5 @@
 import { CurrentOwner } from './top'
-import { isString,isFunction,isUndefined } from './utils'
+import { isString,isFunction,isUndefined,isClass } from './utils'
 import { NormalComponent, HostNode, TextNode } from './vNodes'
 
 export function instantiateVNode (element){
@@ -38,5 +38,5 @@ function mergeProps(type,props,children){
 
 export default function createElement (type,props,...args){
     const  children=Array.from(args)
-    return instantiateVNode({type,props:mergedProps(type,props,args)})
+    return instantiateVNode({type,props:mergeProps(type,props,args)})
 }

@@ -1,6 +1,6 @@
 import { EMPTY_OBJ,NODE_TAG } from '../constant'
 
-export function isFuntion (obj){
+export function isFunction (obj){
     return typeof obj ==='function'
 }
 
@@ -60,7 +60,7 @@ export function setAttribute(node,props){
 }
 
 export function isComponent (instance){
-    return instance.isReactComponent === EMPTY_OBJ
+    return instance && instance.isReactComponent === EMPTY_OBJ
   }
   
 

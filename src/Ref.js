@@ -1,4 +1,4 @@
-import { isComposite,isFuntion,isStateless } from './utils'
+import { isComposite,isFunction,isStateless,isString } from './utils'
 import { NODE_TAG } from './constant'
 
 export default {

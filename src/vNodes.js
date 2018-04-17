@@ -1,4 +1,3 @@
-import { instantiateComponent } from './instantiateComponent'
 import { isClass, getChildrenfromProps } from './utils'
 import { reRendercomponent } from './update'
 import { mountComponent } from './life-cycle/mountComponent'
@@ -72,6 +71,5 @@ export class TextNode {
     mount(parentContext,parentComponent){
         const textNode =(this.dom= window.document.createTextNode(this.text));
         return textNode
-
     }
 }

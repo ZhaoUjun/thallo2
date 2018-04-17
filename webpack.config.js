@@ -33,7 +33,9 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
                 options: {
                     presets: ["env", "react"],
                     plugins: [
-                        "transform-react-jsx"
+                        "transform-react-jsx",
+                        "transform-class-properties",
+                        "transform-object-rest-spread"
                     ]
                 },
             }
