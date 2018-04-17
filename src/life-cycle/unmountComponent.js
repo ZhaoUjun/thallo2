@@ -1,11 +1,12 @@
 import { NODE_TAG } from '../constant'
 import { getChildrenfromProps, isClass, isComponent, isFunction, isNotNullOrUndefined } from '../utils'
-import { CurrentOwner} from '../top'
-import { createDomNode } from '../createDomNode'
-import { getChildContext } from '../utils/getChildContext'
-import Ref from '../Ref'
-import { render } from '../ReactDom';
-import { isString } from 'util';
+
+// import { CurrentOwner} from '../top'
+// import { createDomNode } from '../createDomNode'
+// import { getChildContext } from '../utils/getChildContext'
+// import Ref from '../Ref'
+// import { render } from '../ReactDom';
+
 
 export function unmountComponent(vNode,parentDom){
     const { component,_rendered,dom }=vNode;
@@ -17,9 +18,9 @@ export function unmountComponent(vNode,parentDom){
 }
 
 export function unmountHostNode(vNode,parentDom){
-    const {dom,_rendered}=vNode;
+    const {dom,props}=vNode;
     //@todo dettachEvenet dettachRef
-    unmountChildren(_rendered,parentDom);
+    unmountChildren(getChildrenfromProps(props),parentDom);
     removeDom(dom,parentDom)
 }
 
@@ -37,9 +38,18 @@ function unmountChildren(children,parentDom){
 
 function removeDom(dom,parentDom){
     if(dom&&parentDom){
-        parentDom.removeChildNode(dom)
+        parentDom.removeChild(dom)
     }
 }
 
+export function unmountTree(containerDom){
+    const vNode=containerDom._component;
+    if(vNode){
+        vNode.unmount(containerDom)
+    }
+    else{
+        containerDom.innerHtml=''
+    }
+}
 
 
