@@ -11,8 +11,9 @@ import createElement from './createElement'
 // }
 
 export class Component {
-    _canUpdate=true
+    _disable=true
     _dirty=true
+    _pendingStates=[]
     
     constructor(props,context){
         this.context = context||EMPTY_OBJ;

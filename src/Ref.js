@@ -17,7 +17,7 @@ export default {
             ref(node)
         } else if (isString(ref)) {
             if (vnode&&vnode.parentVNode&&(vnode.parentVNode.tag&NODE_TAG.STATELESS)){
-                console.warn('statelessComponent not support refs')
+                console.warn('statelessComponent do not support refs')
                 return 
             }
             const inst = vnode._owner

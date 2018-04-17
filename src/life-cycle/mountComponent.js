@@ -12,7 +12,6 @@ export function mountComponent(vNode,parentContext,parentComponent){
         component._parentComponent = parentComponent
     }
     if(isFunction(component.componentWillMount)){
-        
         component.componentWillMount();
         component.state=component.getState()
     }
@@ -20,7 +19,6 @@ export function mountComponent(vNode,parentContext,parentComponent){
     CurrentOwner.current=component
     rendered=(vNode._rendered=component.render());
     CurrentOwner.current=null;
-    
     if(isFunction(component.componentDidMount)){
         component.componentDidMount()
     }

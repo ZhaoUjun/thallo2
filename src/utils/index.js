@@ -8,6 +8,10 @@ export function isString(string){
     return typeof string ==='string'
 }
 
+export function isNumber(num){
+    return Number.isNumber(num)
+}
+
 export function isUndefined(obj){
     return typeof obj ==='undefined'
 }
