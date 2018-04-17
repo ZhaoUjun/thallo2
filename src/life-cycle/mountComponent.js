@@ -8,6 +8,7 @@ import Ref from '../Ref'
 export function mountComponent(vNode,parentContext,parentComponent){
     const {tag,props,type,ref}=vNode;
     const component=(vNode.component=new type(props,parentContext));
+    component.vNode=vNode;
     if (isComponent(parentComponent)) {
         component._parentComponent = parentComponent
     }
@@ -22,7 +23,7 @@ export function mountComponent(vNode,parentContext,parentComponent){
     if(isFunction(component.componentDidMount)){
         component.componentDidMount()
     }
-    if(isNotNullOrUndefined){
+    if(isNotNullOrUndefined(ref)){
         Ref.attach(vNode,ref,vNode.dom)
     }
     const dom =(vNode.dom=createDomNode(

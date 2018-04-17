@@ -1,6 +1,7 @@
 import { isClass, getChildrenfromProps } from './utils'
 import { reRendercomponent } from './update'
 import { mountComponent } from './life-cycle/mountComponent'
+import { unmountComponent,unmountHostNode } from './life-cycle/unmountComponent'
 import { NODE_TAG } from './constant'
 import { mountVNode } from './createDomNode'
 
@@ -31,8 +32,8 @@ export class NormalComponent {
         reRendercomponent(previous,this)
     }
 
-    unmount(){
-
+    unmount(parentDom){
+        return unmountComponent(this,parentDom)
     }
 }
 
@@ -57,6 +58,10 @@ export class HostNode {
     mount(parentContext,parentComponent){
         return mountVNode(this,parentContext,parentComponent,)
     }
+
+    unmount(parentDom){
+        return unmountHostNode(this,parentDom)
+    }
 }
 
 export class TextNode {
@@ -71,5 +76,9 @@ export class TextNode {
     mount(parentContext,parentComponent){
         const textNode =(this.dom= window.document.createTextNode(this.text));
         return textNode
+    }
+
+    unmount(parentDom){
+        return unmountHostNode(this,parentDom)
     }
 }

@@ -9,7 +9,7 @@ export class Test extends Component{
         console.log('will mount')
     }
     componentDidMount(){
-        console.log(this.refs)
+        console.log(this)
     }
     render(){
         const {color}=this.props;
