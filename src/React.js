@@ -12,7 +12,7 @@ import createElement from "./createElement";
 
 export class Component {
     _sync=true;
-    _disable = true;
+    _disable = false;
     _dirty = false;
     _pendingStates = [];
 
@@ -34,7 +34,10 @@ export class Component {
             (this._callbackQueue = this._callbackQueue || []).push(callback);
         }
         //@todo setStateSync
-        enqueueRender(this);
+        if(!this._disable){
+            //ensure can not rerender during some life-cycle
+            enqueueRender(this);
+        }
     }
 
     getState() {
