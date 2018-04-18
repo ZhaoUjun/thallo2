@@ -1,7 +1,7 @@
 import * as ReactDom from "./ReactDom";
-import { isFuntion } from "./utils";
+import { isFunction } from "./utils";
 import { EMPTY_OBJ } from "./constant";
-import { putIntoQueue } from "./render-queue";
+import { enqueueRender } from "./render-queue";
 import createElement from "./createElement";
 
 // export function createElement (type,props,...args){
@@ -11,8 +11,9 @@ import createElement from "./createElement";
 // }
 
 export class Component {
+    _sync=true;
     _disable = true;
-    _dirty = true;
+    _dirty = false;
     _pendingStates = [];
 
     constructor(props, context) {
@@ -32,7 +33,8 @@ export class Component {
         if (callback) {
             (this._callbackQueue = this._callbackQueue || []).push(callback);
         }
-        putIntoQueue(this);
+        //@todo setStateSync
+        enqueueRender(this);
     }
 
     getState() {
@@ -41,7 +43,7 @@ export class Component {
         while ((s = this._pendingStates.pop())) {
             collector = {
                 ...collector,
-                ...(isFuntion(s) ? s.call(this, this.state, this.props) : s)
+                ...(isFunction(s) ? s.call(this, this.state, this.props) : s)
             };
         }
         return { ...this.state, ...collector };

@@ -67,7 +67,7 @@ export function isComponent(instance) {
 }
 
 export function defer(fun, ...args) {
-    fun = isFuntion(fun) ? fun.bind(null, ...args) : fun;
-    const deferer = requestAnimationFrame || setTimeout;
-    return deferer(fun);
+    fun = isFunction(fun) ? fun.bind(null, ...args) : fun;
+    setTimeout(fun,0)
+    // const deferer = requestAnimationFrame || setTimeout;
 }

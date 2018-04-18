@@ -7,6 +7,6 @@ window.React = React;
 
 React.ReactDom.render(<Test color="red" />, document.getElementById("root"));
 
-setTimeout(() => {
-    unmountTree(document.getElementById("root"));
-}, 2000);
+// setTimeout(() => {
+//     unmountTree(document.getElementById("root"));
+// }, 2000);

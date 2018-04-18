@@ -1,8 +1,12 @@
-import { updateComponent } from "./updater";
+import { updateComponent } from "./life-cycle/updateComponent";
 import { renderQueue } from "./top";
 import { defer } from "./utils";
 
-export function enterQueue(component) {
+export function enqueueRender (component) {
+    if(component._sync){
+        updateComponent(component)
+        return
+    }
     if (
         !component._dirty &&
         (component._dirty = true) &&
@@ -15,7 +19,7 @@ export function enterQueue(component) {
 function flushQueue() {
     let c;
     while ((c = renderQueue.pop())) {
-        if (!c._dirty) {
+        if (c._dirty) {
             updateComponent(c);
         }
     }

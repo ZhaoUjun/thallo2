@@ -36,7 +36,6 @@ export function mountVNode(vNode, parentContext, parentComponent, isSvg) {
                 createDomNode(childVNode, parentContext, parentComponent, isSvg)
             )
             .forEach(childDomNode => {
-                console.log(childDomNode);
                 dom.appendChild(childDomNode);
             });
     }
