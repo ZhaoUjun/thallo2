@@ -28,3 +28,13 @@ function reRenderStateLess(preVNode, nextVnode, prarentDom) {
     const rendered = (nextVnode._rendered = type(props));
     return diff(preVNode._rendered, rendered, prarentDom);
 }
+
+function diffHostNode(preVNode,nextVnode,prarentDom){
+    const dom =(nextVnode.dom=preVNode.dom)
+    dom.vNode=nextVnode;
+
+}
+
+function diffAttributes(preProps,nextProps,dom){
+    
+}

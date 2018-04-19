@@ -20,8 +20,3 @@ export function reRenderComponent(preVnode,nextVnode){
     }
     return updateComponent(component)
 }
-
-export function reRenderStateLessComponent(preVnode,nextVnode){
-    
-
-}

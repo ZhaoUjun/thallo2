@@ -9,9 +9,12 @@ export function isString(string) {
 }
 
 export function isNumber(num) {
-    return Number.isNumber(num);
+    return typeof num === 'number';
 }
 
+export function isIterator(obj){
+    return obj[Symbol.iterator]
+}
 export function isUndefined(obj) {
     return typeof obj === "undefined";
 }
