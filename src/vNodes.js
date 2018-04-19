@@ -1,30 +1,34 @@
-import { isClass, getChildrenfromProps } from "./utils";
+import { isClass, getChildrenfromProps,isString,isFunction } from "./utils";
 import { reRendercomponent } from "./update";
-import { mountComponent } from "./life-cycle/mountComponent";
+import { mountComponent,mountStateLessComponent } from "./life-cycle/mountComponent";
 import {
     unmountComponent,
-    unmountHostNode
+    unmountHostNode,
+    unmountStateLessComponent
 } from "./life-cycle/unmountComponent";
 import { NODE_TAG } from "./constant";
 import { mountVNode } from "./createDomNode";
+
+function Base (props,type){
+    this.type = type;
+    this._owner = props.owner;
+    delete props.owner;
+    if ((this.ref = props.ref)) {
+        delete props.ref ;
+    }
+    this.props = props;
+    this.key = props.key || null;
+    this.dom = null;
+}
 
 export class NormalComponent {
     tag = NODE_TAG.NORMAL_COMPONENT;
 
     constructor(element) {
         const { props, type } = element;
-        this.type = type;
-        this.name =
-            type.name || type.toString().match(/^function\s*([^\s(]+)/)[1];
+        Base.call(this,props,type)
+        this.name =type.name || type.toString().match(/^function\s*([^\s(]+)/)[1];
         type.displayName = this.name;
-        this._owner = props.owner;
-        delete props.owner;
-        if ((this.ref = props.ref)) {
-            delete props.ref;
-        }
-        this.props = props;
-        this.key = props.key || null;
-        this.dom = null;
     }
 
     mount(parentContext, parentComponent) {
@@ -40,21 +44,31 @@ export class NormalComponent {
     }
 }
 
+export class StateLessCompoent{
+    tag = NODE_TAG.STATELESS;
+
+    constructor(element) {
+        const { props, type } = element;
+        Base.call(this,props,type)
+    }
+
+    mount(parentContext, parentComponent) {
+        
+        return mountStateLessComponent(this, parentContext, parentComponent);
+    }
+
+    unmount(parentDom) {
+        return unmountStateLessComponent(this, parentDom);
+    }
+}
+
 export class HostNode {
     tag = NODE_TAG.NODE;
 
     constructor(element) {
         const { props, type } = element;
-        this.type = type;
+        Base.call(this,props,type)
         this.namespace = props.namespace;
-        this._owner = props.owner;
-        delete props.owner;
-        if ((this.ref = props.ref)) {
-            delete props.ref;
-        }
-        this.props = props;
-        this.key = props.key || null;
-        this.dom = null;
     }
 
     mount(parentContext, parentComponent) {

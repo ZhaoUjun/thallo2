@@ -66,6 +66,10 @@ export function isComponent(instance) {
     return instance && instance.isReactComponent === EMPTY_OBJ;
 }
 
+export function isSameNode(a,b){
+    return a.type===b.type&&a.key===b.key
+}
+
 export function defer(fun, ...args) {
     fun = isFunction(fun) ? fun.bind(null, ...args) : fun;
     setTimeout(fun,0)

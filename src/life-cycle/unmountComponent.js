@@ -21,6 +21,12 @@ export function unmountComponent(vNode, parentDom) {
     removeDom(vNode, parentDom);
 }
 
+export function unmountStateLessComponent(vNode,parentDom){
+    const { _rendered, dom } = vNode;
+    _rendered.unmount();
+    removeDom(vNode, parentDom);
+}
+
 export function unmountHostNode(vNode, parentDom) {
     const { dom, props } = vNode;
     unmountChildren(getChildrenfromProps(props), dom);

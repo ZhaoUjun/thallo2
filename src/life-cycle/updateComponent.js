@@ -68,5 +68,3 @@ export function updateComponent(component, isForce) {
     }
     return vNode.dom;
 }
-
-export function reRenderComponent(preVNode, nextVNode, prarentComponent) {}

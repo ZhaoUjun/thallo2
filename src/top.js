@@ -4,4 +4,4 @@ export const CurrentOwner = {
 
 export const mountedComponents = [];
 
-export const renderQueue = [];
+export const dirtyComponent = [];

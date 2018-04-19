@@ -17,10 +17,10 @@ export class Test extends Component {
         setTimeout(()=>{
             console.log(this.state)
             this.setState({fontSize:'15px'})
-            console.log(this.state)     
-            this.setState({fontSize:'20px'})
-            console.log(this.state)        
-        },1000)
+            // console.log(this.state)     
+            // this.setState({fontSize:'20px'})
+            // console.log(this.state)        
+        },3000)
     }
     render() {
         const { color } = this.props;
@@ -31,7 +31,12 @@ export class Test extends Component {
                 <a href="www.baidu.com" ref={node => console.log(node)}>
                     click
                 </a>
+                <StateLess color={color}/>   
             </div>
         );
     }
+}
+
+function StateLess({color}){
+    return  <div color={color}>StateLess</div>
 }

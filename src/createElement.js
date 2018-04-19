@@ -1,6 +1,6 @@
 import { CurrentOwner } from "./top";
 import { isString, isFunction, isUndefined, isClass } from "./utils";
-import { NormalComponent, HostNode, TextNode } from "./vNodes";
+import { NormalComponent, HostNode, TextNode ,StateLessCompoent} from "./vNodes";
 
 export function instantiateVNode(element) {
     if (typeof element === "string") {
@@ -10,7 +10,7 @@ export function instantiateVNode(element) {
     if (typeof type === "function") {
         return isClass(type)
             ? new NormalComponent(element)
-            : new NormalComponent(element);
+            : new StateLessCompoent(element);
     } else if (typeof type === "string") {
         return new HostNode(element);
     }

@@ -12,7 +12,7 @@ import { getChildContext } from "../utils/getChildContext";
 import Ref from "../Ref";
 
 export function mountComponent(vNode, parentContext, parentComponent) {
-    const { tag, props, type, ref } = vNode;
+    const {  props, type, ref } = vNode;
     const component = (vNode.component = new type(props, parentContext));
     component.vNode = vNode;
     if (isComponent(parentComponent)) {
@@ -40,4 +40,20 @@ export function mountComponent(vNode, parentContext, parentComponent) {
     ));
     component._disable = false;
     return dom;
+}
+
+export function mountStateLessComponent(vNode, parentContext, parentComponent){
+    const { props, type, ref } = vNode;
+    if (ref){
+        console.error('stateless component do not support ref ')
+    }
+    CurrentOwner.current = null;    
+    const rendered=(vNode._rendered = type(props))
+    const dom = (vNode.dom = createDomNode(
+        rendered,
+        getChildContext(vNode, parentContext),
+        parentComponent,
+        false
+    ));
+    return dom
 }
