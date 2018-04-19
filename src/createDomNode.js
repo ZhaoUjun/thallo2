@@ -1,5 +1,5 @@
 import { NODE_TAG } from "./constant";
-import { getChildrenfromProps, isString, isNumber,isIterator } from "./utils";
+import { getChildrenfromProps, isString, isNumber, isIterator } from "./utils";
 import { attachAttributes } from "./DomProperty";
 import Ref from "./Ref";
 
@@ -21,11 +21,11 @@ export function createDomNode(
         domNode = vNode.mount(parentContext, parentComponent);
     } else if (isString(vNode) || isNumber(vNode)) {
         domNode = window.document.createTextNode(vNode);
-    } else if (isIterator(vNode)){
-        domNode=window.document.createDocumentFragment();
-        vNode.forEach(item=>{
-            domNode.appendChild(createDomNode(item))
-        })
+    } else if (isIterator(vNode)) {
+        domNode = window.document.createDocumentFragment();
+        vNode.forEach(item => {
+            domNode.appendChild(createDomNode(item,parentContext,parentComponent));
+        });
     }
     return domNode;
 }
@@ -36,13 +36,11 @@ export function mountVNode(vNode, parentContext, parentComponent, isSvg) {
     attachAttributes(dom, props);
     const children = getChildrenfromProps(props);
     if (children) {
-        children
-        .map(childVNode =>
-            createDomNode(childVNode, parentContext, parentComponent, isSvg)
-        )
-        .forEach(childDomNode => {
-            dom.appendChild(childDomNode);
-        });
+        for (let childVNode of children) {
+            dom.appendChild(
+                createDomNode(childVNode, parentContext, parentComponent, isSvg)
+            );
+        }
     }
     if (ref) {
         Ref.attach(vNode, ref, dom);
