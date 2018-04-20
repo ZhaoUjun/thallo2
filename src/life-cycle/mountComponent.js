@@ -29,15 +29,15 @@ export function mountComponent(vNode, parentContext, parentComponent) {
     if (isFunction(component.componentDidMount)) {
         component.componentDidMount();
     }
-    if (isNotNullOrUndefined(ref)) {
-        Ref.attach(vNode, ref, vNode.dom);
-    }
     const dom = (vNode.dom = createDomNode(
         rendered,
         getChildContext(vNode, parentContext),
         parentComponent,
         false
     ));
+    if (isNotNullOrUndefined(ref)) {
+        Ref.attach(vNode, ref, vNode.dom);
+    }
     component._disable = false;
     return dom;
 }
