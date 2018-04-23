@@ -23,6 +23,17 @@ export default function diff(preVNode, nextVnode, prarentDom) {
     return dom;
 }
 
+export function patchAtr(preVNode,nextVnode,isSvg){
+    const domNode =preVNode.dom;
+    const preProps=preVNode.props;
+    const nextProps=nextVnode.props;
+    Object.keys(nextProps).forEach(propName=>{
+        if(propName!=='children'){
+            
+        }
+    })
+}
+
 function reRenderStateLess(preVNode, nextVnode, prarentDom) {
     const { props, type } = nextVnode;
     const rendered = (nextVnode._rendered = type(props));
