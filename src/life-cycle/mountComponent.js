@@ -4,7 +4,8 @@ import {
     isClass,
     isComponent,
     isFunction,
-    isNotNullOrUndefined
+    isNotNullOrUndefined,
+    hasLifeCycle
 } from "../utils";
 import { CurrentOwner } from "../top";
 import { createDomNode } from "../createDomNode";
@@ -18,7 +19,7 @@ export function mountComponent(vNode, parentContext, parentComponent) {
     if (isComponent(parentComponent)) {
         component._parentComponent = parentComponent;
     }
-    if (isFunction(component.componentWillMount)) {
+    if (hasLifeCycle('componentWillMount',component)) {
         component.componentWillMount();
         component.state = component.getState();
     }
@@ -26,7 +27,7 @@ export function mountComponent(vNode, parentContext, parentComponent) {
     CurrentOwner.current = component;
     rendered = vNode._rendered = component.render();
     CurrentOwner.current = null;
-    if (isFunction(component.componentDidMount)) {
+    if (hasLifeCycle('componentDidMount',component)) {
         component.componentDidMount();
     }
     const dom = (vNode.dom = createDomNode(

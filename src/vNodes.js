@@ -1,5 +1,5 @@
 import { isClass, getChildrenfromProps,isString,isFunction } from "./utils";
-import { reRendercomponent } from "./update";
+import { reRendercomponent } from "./diff";
 import { mountComponent,mountStateLessComponent } from "./life-cycle/mountComponent";
 import {
     unmountComponent,

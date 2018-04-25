@@ -4,7 +4,8 @@ import {
     isClass,
     isComponent,
     isFunction,
-    isNotNullOrUndefined
+    isNotNullOrUndefined,
+    hasLifeCycle
 } from "../utils";
 import { CurrentOwner, mountedComponents } from "../top";
 import { createDomNode } from "../createDomNode";
@@ -21,15 +22,13 @@ export function updateComponent(component, isForce) {
     let shouldSkip = false,
         snapShot;
     if (
-        component.shouldComponentUpdate &&
-        isFunction(component.shouldComponentUpdate)
+        hasLifeCycle('shouldComponentUpdate',component)
     ) {
         shouldSkip =
             component.shouldComponentUpdate(props, state, context) && !isForce;
     }
     if (
-        component.getSnapshotBeforeUpdate &&
-        isFunction(component.getSnapshotBeforeUpdate)
+        hasLifeCycle('getSnapshotBeforeUpdate',component)
     ) {
         snapShot = component.getSnapshotBeforeUpdate(
             preProps,
@@ -39,8 +38,7 @@ export function updateComponent(component, isForce) {
     }
     if (!shouldSkip) {
         if (
-            component.componentWillUpdate &&
-            isFunction(component.componentWillUpdate)
+            hasLifeCycle('componentWillUpdate',component)
         ) {
             component.componentWillUpdate(props, state);
         }
@@ -56,8 +54,7 @@ export function updateComponent(component, isForce) {
     component.preContext = context;
     component._dirty = false;
     if (
-        component.componentDidUpdate &&
-        isFunction(component.componentDidUpdate)
+        hasLifeCycle('componentDidUpdate',component)
     ) {
         component.componentDidUpdate(preProps, preState, snapShot);
     }

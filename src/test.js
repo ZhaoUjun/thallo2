@@ -14,13 +14,13 @@ export class Test extends Component {
         console.log("shouldComponentUpdate");
     }
     componentDidMount() {
-        // setTimeout(()=>{
-        //     console.log(this.state)
-        //     this.setState({fontSize:'15px'})
-        //     // console.log(this.state)     
-        //     // this.setState({fontSize:'20px'})
-        //     // console.log(this.state)        
-        // },3000)
+        setTimeout(()=>{
+            console.log(this.state)
+            this.setState({fontSize:'15px'})
+            // console.log(this.state)     
+            // this.setState({fontSize:'20px'})
+            // console.log(this.state)        
+        },3000)
     }
     render() {
         const { color } = this.props;

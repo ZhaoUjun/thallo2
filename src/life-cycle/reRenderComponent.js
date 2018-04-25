@@ -1,18 +1,14 @@
 import { updateComponent } from "./updateComponent";
 import { CurrentOwner } from "../top";
-import { isFunction, isNotNullOrUndefined } from "../utils";
+import { isFunction, isNotNullOrUndefined, hasLifeCycle } from "../utils";
 import Ref from "../Ref";
 
-export function 
-reRenderComponent(preVnode, nextVnode) {
+export function reRenderComponent(preVnode, nextVnode) {
     const preProps = preVnode.props;
     const nextProps = nextVnode.props;
     const component = (nextVnode.component = preProps.component);
     component._disable = true; //avoid updating again when call setState in this hook
-    if (
-        component.componentWillReceiveProps &&
-        isFunction(component.componentWillReceiveProps)
-    ) {
+    if (hasLifeCycle("componentWillReceiveProps", component)) {
         component.componentWillReceiveProps(nextProps);
     }
     component._disable = false;

@@ -4,7 +4,8 @@ import {
     isClass,
     isComponent,
     isFunction,
-    isNotNullOrUndefined
+    isNotNullOrUndefined,
+    hasLifeCycle
 } from "../utils";
 import Ref from "../Ref";
 // import { render } from '../ReactDom';
@@ -12,8 +13,7 @@ import Ref from "../Ref";
 export function unmountComponent(vNode, parentDom) {
     const { component, _rendered, dom } = vNode;
     if (
-        component.componentWillUnmount &&
-        isFunction(component.componentWillUnmount)
+        hasLifeCycle('componentWillUnmount',component)
     ) {
         component.componentWillUnmount();
     }

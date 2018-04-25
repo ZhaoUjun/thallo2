@@ -5,10 +5,15 @@ const styleOps = {
             style[styleName] = styles[styleName];
         }
     },
-    update: (node, styles) => {
+    update: (node, nextStyles,preStyles) => {
         const { style } = node;
-        for (let styleName in styles) {
-            style[styleName] = styles[styleName];
+        for (let styleName in nextStyles) {
+            style[styleName] = nextStyles[styleName];
+        }
+        for(let styleName in preStyles){
+            if (!nextStyles.hasOwnProperty(styleName)){
+                style[styleName]=''
+            }
         }
     },
     remove: (node, styles) => {
@@ -24,12 +29,6 @@ function parseStyle(styleObj) {
     }, "");
 }
 
-function setNodeStyle(node, styles) {
-    const { style } = node;
-    for (let styleName in styles) {
-        style[styleName] = styles[styleName];
-    }
-}
 export function attachAttributes(node, props) {
     Object.keys(props).forEach(propName => {
         if (propName === "children") {
@@ -49,13 +48,15 @@ export function removeAttr(node, propName) {
     node.removeAttribute(propName)
 }
 
-export function updateAttr(node, props) {
-    Object.keys(props).forEach(propName => {
-        if (propName === "style") {
-            styleOps.update(node, props[propName]);
-            return;
-        }
-        node.setAttribute(propName, props[propName]);
-    });
-
+export function updateAttr(node, name,value,preValue) {
+    if(name==='children'){
+        return
+    }
+    else if (name==='style'){
+        return styleOps.update(node,value,preValue)
+    }
+    else if(name==='className'){
+        return node.setAttribute("class", value)
+    }
+    node.setAttribute(name,value);
 }

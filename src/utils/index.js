@@ -78,3 +78,7 @@ export function defer(fun, ...args) {
     setTimeout(fun,0)
     // const deferer = requestAnimationFrame || setTimeout;
 }
+
+export function hasLifeCycle(name ,component){
+    return component[name]&&isFunction(component[name])
+}
