@@ -1,4 +1,4 @@
-import { isEventName, addEventHandler } from "./event";
+import { isEventName, addEventHandler,removeEventHandler } from "./event";
 
 const styleOps = {
     attach: (node, styles) => {
@@ -58,6 +58,7 @@ export function updateAttr(node, name, value, preValue) {
     } else if (name === "className") {
         return node.setAttribute("class", value);
     } else if (isEventName) {
+        removeEventHandler(node,name)
         return addEventHandler(node, name, value);
     }
     node.setAttribute(name, value);

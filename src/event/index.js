@@ -6,7 +6,7 @@ export function isEventName(name) {
 }
 
 function parseEventName(type) {
-    return type.substr(2).toLowerCase();
+    return isEventName(type)?type.substr(2).toLowerCase():type;
 }
 
 export function addEventHandler(dom, type, handler) {
@@ -16,6 +16,8 @@ export function addEventHandler(dom, type, handler) {
     const name = parseEventName(type);
     if (BUBBLE_EVENTS.includes(name)) {
         addHandlerToGlobal(dom, name, handler);
+    }else{
+        addHandlerToDom(dom,name,handler)
     }
 }
 
@@ -27,4 +29,6 @@ export function addHandlerToGlobal(dom, type, handler) {
     globalEvent.add(dom, type, handler);
 }
 
-export function removeEventHandler() {}
+export function removeEventHandler(dom,type) {
+    globalEvent.remove(dom,parseEventName(type))
+}
