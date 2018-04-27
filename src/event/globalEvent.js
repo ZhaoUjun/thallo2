@@ -1,5 +1,7 @@
-const globalEventCollects = new WeakMap();
+import { SyntheticEvent } from './SyntheticEvent'
 
+const globalEventCollects = new WeakMap();
+const eventPool=new Map();
 const eventCount = Object.create(null);// sum the same type event 
 
 const globalListner = function(e) {
@@ -9,7 +11,7 @@ const globalListner = function(e) {
             globalEventCollects.has(target) &&
             globalEventCollects.get(target)[type]
         ) {
-            globalEventCollects.get(target)[type](e);
+            globalEventCollects.get(target)[type](new SyntheticEvent(type,e));
         }
         target = target.parentNode;
     }
