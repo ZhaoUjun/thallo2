@@ -1,3 +1,5 @@
+import { isEventName, addEventHandler } from "./event";
+
 const styleOps = {
     attach: (node, styles) => {
         const { style } = node;
@@ -5,14 +7,14 @@ const styleOps = {
             style[styleName] = styles[styleName];
         }
     },
-    update: (node, nextStyles,preStyles) => {
+    update: (node, nextStyles, preStyles) => {
         const { style } = node;
         for (let styleName in nextStyles) {
             style[styleName] = nextStyles[styleName];
         }
-        for(let styleName in preStyles){
-            if (!nextStyles.hasOwnProperty(styleName)){
-                style[styleName]=''
+        for (let styleName in preStyles) {
+            if (!nextStyles.hasOwnProperty(styleName)) {
+                style[styleName] = "";
             }
         }
     },
@@ -34,29 +36,29 @@ export function attachAttributes(node, props) {
         if (propName === "children") {
             return;
         } else if (propName === "className") {
-            node.setAttribute("class", props[propName]);
-            return;
+            return node.setAttribute("class", props[propName]);
         } else if (propName === "style") {
-            styleOps.attach(node, props[propName]);
-            return;
+            return styleOps.attach(node, props[propName]);
+        } else if (isEventName(propName)) {
+            return addEventHandler(node, propName, props[propName]);
         }
         node.setAttribute(propName, props[propName]);
     });
 }
 
 export function removeAttr(node, propName) {
-    node.removeAttribute(propName)
+    node.removeAttribute(propName);
 }
 
-export function updateAttr(node, name,value,preValue) {
-    if(name==='children'){
-        return
+export function updateAttr(node, name, value, preValue) {
+    if (name === "children") {
+        return;
+    } else if (name === "style") {
+        return styleOps.update(node, value, preValue);
+    } else if (name === "className") {
+        return node.setAttribute("class", value);
+    } else if (isEventName) {
+        return addEventHandler(node, name, value);
     }
-    else if (name==='style'){
-        return styleOps.update(node,value,preValue)
-    }
-    else if(name==='className'){
-        return node.setAttribute("class", value)
-    }
-    node.setAttribute(name,value);
+    node.setAttribute(name, value);
 }

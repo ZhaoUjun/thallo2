@@ -26,7 +26,7 @@ export class Test extends Component {
         const { color } = this.props;
         const { fontSize } =this.state;
         return (
-            <div style={{ color,fontSize }} ref="test">
+            <div style={{ color,fontSize }} ref="test" onClick={(e)=>{console.log(e)}}>
                 test
                 <a href="www.baidu.com" ref={node => console.log(node)}>
                     click

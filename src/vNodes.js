@@ -1,5 +1,5 @@
 import { isClass, getChildrenfromProps,isString,isFunction } from "./utils";
-import { reRendercomponent } from "./diff";
+import { reRenderComponent } from "./life-cycle/reRenderComponent";
 import { mountComponent,mountStateLessComponent } from "./life-cycle/mountComponent";
 import {
     unmountComponent,
@@ -36,7 +36,7 @@ export class NormalComponent {
     }
 
     update(previous, current) {
-        reRendercomponent(previous, this);
+        reRenderComponent(previous, this);
     }
 
     unmount(parentDom) {
