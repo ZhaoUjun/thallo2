@@ -1,19 +1,34 @@
-import { SyntheticEvent } from './SyntheticEvent'
-
+import { SyntheticEvent } from "./SyntheticEvent";
 const globalEventCollects = new WeakMap();
-const eventPool=new Map();
-const eventCount = Object.create(null);// sum the same type event 
+// const eventPool = new Map(); @todo make event pooled
+const eventCount = Object.create(null); // sum the same type event
 
 const globalListner = function(e) {
-    let { type, target } = e;
-    while (target && target !== document) {
+    let { type, target } = e,
+        count = eventCount[type],
+        syntheticEvent,
+        handler;
+    while (count > 0 && target) {
         if (
             globalEventCollects.has(target) &&
-            globalEventCollects.get(target)[type]
+            (handler = globalEventCollects.get(target)[type])
         ) {
-            globalEventCollects.get(target)[type](new SyntheticEvent(type,e));
+            handler(
+                syntheticEvent || (syntheticEvent = new SyntheticEvent(type, e))
+            );
+            count--;
+            if (syntheticEvent.isPropagationStopped) {
+                return;
+            }
+        }
+        if (target === document) {
+            return;
         }
         target = target.parentNode;
+    }
+    if(!syntheticEvent._isPersisted){
+        //https://reactjs.org/docs/events.html#ui-events
+        syntheticEvent.nullify()
     }
 };
 
@@ -24,7 +39,7 @@ export const globalEvent = {
             eventCount[name] = 0;
             document.addEventListener(name, globalListner);
         } else {
-            handlers = globalEventCollects.get(dom);
+            handlers = globalEventCollects.get(dom)||Object.create(null);
         }
         handlers[name] = handler;
         eventCount[name]++;

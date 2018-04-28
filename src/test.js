@@ -22,17 +22,26 @@ export class Test extends Component {
             // console.log(this.state)        
         },3000)
     }
+    handleClick=(e)=>{
+        console.log('click1')
+       
+    }
+    handleClick2=(e)=>{
+        e.stopPropagation()
+        console.log('click2')
+    }
     render() {
         const { color } = this.props;
         const { fontSize } =this.state;
         return (
-            <div style={{ color,fontSize }} ref="test" onClick={(e)=>{console.log(e)}}>
+            <div style={{ color,fontSize }} ref="test" onClick={this.handleClick}>
                 test
                 <a href="www.baidu.com" ref={node => console.log(node)}>
                     click
                 </a>
                 <StateLess color={color}/>   
                 {[1,2,3].map(item=><div key={item}>{item}</div> )}
+                <button onClick={this.handleClick2}>click2</button>
             </div>
         );
     }
