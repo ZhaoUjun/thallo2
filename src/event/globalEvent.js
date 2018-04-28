@@ -27,7 +27,11 @@ const globalListner = function(e) {
         target = target.parentNode;
     }
     if(!syntheticEvent._isPersisted){
-        //https://reactjs.org/docs/events.html#ui-events
+        /**
+         * it will be nullify after in the end of this tick
+         *  https://reactjs.org/docs/events.html#ui-events
+         */
+      
         syntheticEvent.nullify()
     }
 };
