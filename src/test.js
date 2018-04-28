@@ -1,4 +1,5 @@
-import { Component } from "./React";
+import { Component } from "./Component";
+
 export function Button() {
     return <a href="www.baidu.com">click</a>;
 }
