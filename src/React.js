@@ -1,14 +1,29 @@
-import * as ReactDom from "./ReactDom";
-
+import {render} from "./ReactDom";
 import createElement from "./createElement";
+import Component from './Component'
 
-// export function createElement (type,props,...args){
-//     const  children=Array.from(args)
-//     const  mergeProps=props?Object.assign(props,{children}):{children};
-//     return {type,props:mergeProps}
-// }
+/**
+ * Top API (done)
+ * Component done
+ * render done
+ * createElement
+ * 
+ * (todo)
+ * createFactory
+ * cloneElement
+ * PureComponent
+ * createPortal
+ * createContext
+ * createRef
+ * Children
+ */
 
-export default {
+let React=window.React=window.reactDom={
     createElement,
-    ReactDom
+    render,
+    Component
 };
+
+
+
+export default React;
