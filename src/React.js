@@ -1,27 +1,31 @@
 import {render} from "./ReactDom";
-import createElement from "./createElement";
-import Component from './Component'
-
+import {createElement,createFactory} from "./ReactElement"
+import {Component} from './Component'
+import{isValidElement} from './utils/isValidElement'
 /**
  * Top API (done)
  * Component done
  * render done
  * createElement
+ * createFactory
  * 
  * (todo)
- * createFactory
+ * Fragment
  * cloneElement
  * PureComponent
  * createPortal
  * createContext
  * createRef
  * Children
+ * findDomNode
  */
 
-let React=window.React=window.reactDom={
+const React=window.React=window.reactDom={
     createElement,
     render,
-    Component
+    Component,
+    createFactory,
+    isValidElement
 };
 
 

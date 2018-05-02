@@ -1,6 +1,7 @@
 import { isFunction } from "./utils";
 import { EMPTY_OBJ } from "./constant";
 import { enqueueRender } from "./render-queue";
+
 export class Component {
     _sync=false;
     _disable = false;

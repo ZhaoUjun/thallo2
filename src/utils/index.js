@@ -80,5 +80,9 @@ export function defer(fun, ...args) {
 }
 
 export function hasLifeCycle(name ,component){
-    return component[name]&&isFunction(component[name])
+    return component&&component[name]&&isFunction(component[name])
+}
+
+export function objHasNullProp(propName,obj){
+    return Object.prototype.hasOwnProperty.call(obj,propName)&&Object[propName]===null
 }

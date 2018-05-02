@@ -4,7 +4,7 @@ import { reRenderComponent } from "./life-cycle/reRenderComponent";
 import { isSameNode, isNotNullOrUndefined } from "./utils";
 import { updateAttr, removeAttr } from "./DomProperty";
 import Ref from "./Ref";
-import { unmountComponent } from "./life-cycle/unmountComponent";
+import { unmount } from "./life-cycle/unmountComponent";
 
 export default function diff(preVNode, nextVNode, prarentDom, isSvg) {
     let dom = window.document.createTextNode("");
@@ -53,8 +53,8 @@ function diffHostNode(preVNode, nextVNode,isSvg) {
     diffAttributes(preVNode, nextVNode, isSvg);
     diffChildren(
         dom,
-        preVNode.props.children,
-        nextVNode.props.children
+        preVNode.props.children||[],
+        nextVNode.props.children||[]
     );
     if (nextVNode.ref !== null) {
         Ref.update(preVNode, nextVNode, dom);
@@ -158,7 +158,7 @@ function addVnodes(parentElm, before, vnodes, startIdx, endIdx) {
 
 function removeVnodes(parentElm, vnodes, startIdx, endIdx) {
     for (; startIdx <= endIdx; ++startIdx) {
-        unmountComponent(vnodes[startIdx], parentElm);
+        unmount(vnodes[startIdx], parentElm);
     }
 }
 

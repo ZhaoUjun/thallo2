@@ -10,6 +10,27 @@ import {
 import Ref from "../Ref";
 // import { render } from '../ReactDom';
 
+export function unmount(vNode,parentDom){
+    const{tag}=vNode
+    if (
+        tag &
+        (NODE_TAG.NORMAL_COMPONENT |
+            NODE_TAG.STATELESS |
+            NODE_TAG.NODE |
+            NODE_TAG.TEXT)
+    ) {
+        vNode.unmount(parentContext, parentComponent);
+    } else if (isString(vNode) || isNumber(vNode)) {
+
+        
+    } else if (isIterator(vNode)) {
+        // domNode = window.document.createDocumentFragment();
+        vNode.forEach(item => {
+            unmount(item,parentDom)
+        });
+    }
+}
+
 export function unmountComponent(vNode, parentDom) {
     const { component, _rendered, dom } = vNode;
     if (
