@@ -1,7 +1,7 @@
 import { createDomNode } from "./createDomNode";
 import { NODE_TAG } from "./constant";
 import { reRenderComponent } from "./life-cycle/reRenderComponent";
-import { isSameNode, isNotNullOrUndefined,isString } from "./utils";
+import { isSameNode, isNotNullOrUndefined, isString } from "./utils";
 import { updateAttr, removeAttr } from "./DomProperty";
 import Ref from "./Ref";
 import { unmount } from "./life-cycle/unmountComponent";
@@ -14,7 +14,7 @@ export default function diff(preVNode, nextVNode, prarentDom, isSvg) {
         } else if (nextVNode.tag & NODE_TAG.STATELESS) {
             dom = reRenderStateLess(preVNode, nextVNode, prarentDom);
         } else if (nextVNode.tag & NODE_TAG.NODE) {
-            dom = diffHostNode(preVNode,nextVNode,isSvg)
+            dom = diffHostNode(preVNode, nextVNode, isSvg);
         }
     } else {
         preVNode.unmount(prarentDom);
@@ -48,18 +48,18 @@ function reRenderStateLess(preVNode, nextVnode, prarentDom) {
     return diff(preVNode._rendered, rendered, prarentDom);
 }
 
-function diffHostNode(preVNode, nextVNode,isSvg) {
+function diffHostNode(preVNode, nextVNode, isSvg) {
     const dom = preVNode.dom;
     diffAttributes(preVNode, nextVNode, isSvg);
     diffChildren(
         dom,
-        preVNode.props.children||[],
-        nextVNode.props.children||[]
+        preVNode.props.children || [],
+        nextVNode.props.children || []
     );
     if (nextVNode.ref !== null) {
         Ref.update(preVNode, nextVNode, dom);
     }
-    return dom
+    return dom;
 }
 
 //snabbdom https://github.com/snabbdom/snabbdom
@@ -156,19 +156,9 @@ function addVnodes(parentElm, before, vnodes, startIdx, endIdx) {
     }
 }
 
-
-
 function removeVnodes(parentElm, vnodes, startIdx, endIdx) {
-
     for (; startIdx <= endIdx; ++startIdx) {
-        const vnode=vnodes[startIdx]
-            unmount(vnode, parentElm);
-        // if(isString(vnode)){
-        //     console.log(parentElm.children)
-        // }else{
-        //     console.log(parentElm.childNodes)            
-        
-        // }
+        unmount(vnodes[startIdx], parentElm);
     }
 }
 
@@ -192,12 +182,11 @@ function diffAttributes(preVNode, nextVNode, dom) {
 }
 
 function removeText(from) {
-    if(Array.isArray(from)) {
+    if (Array.isArray(from)) {
         const child = from[0].nextSibling;
 
         child.parentNode.removeChild(child);
-    }
-    else {
-        from.textContent = '';
+    } else {
+        from.textContent = "";
     }
 }

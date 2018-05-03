@@ -4,7 +4,8 @@ import { mountComponent,mountStateLessComponent } from "./life-cycle/mountCompon
 import {
     unmountComponent,
     unmountHostNode,
-    unmountStateLessComponent
+    unmountStateLessComponent,
+    unmountTextNode
 } from "./life-cycle/unmountComponent";
 import { NODE_TAG,REACT_ELEMENT_TYPE } from "./constant";
 import { mountVNode } from "./createDomNode";
@@ -32,7 +33,7 @@ export class NormalComponent {
         this.name =type.name || type.toString().match(/^function\s*([^\s(]+)/)[1];
         type.displayName = this.name;
         // Object.freeze(this);
-        // Object.freeze(props)
+        Object.freeze(props)
     }
 
     mount(parentContext, parentComponent) {
@@ -55,7 +56,7 @@ export class StateLessCompoent{
         const { props, type } = element;
         Base.call(this,props,type)
         // Object.freeze(this);
-        // Object.freeze(props)
+        Object.freeze(props)
     }
 
     mount(parentContext, parentComponent) {
@@ -75,7 +76,7 @@ export class HostNode {
         Base.call(this,props,type)
         this.namespace = props.namespace;
         // Object.freeze(this);
-        // Object.freeze(props)
+        Object.freeze(props)
     }
 
     mount(parentContext, parentComponent) {
@@ -103,6 +104,6 @@ export class TextNode {
     }
 
     unmount(parentDom) {
-        return unmountHostNode(this, parentDom);
+        return unmountTextNode(this, parentDom);
     }
 }

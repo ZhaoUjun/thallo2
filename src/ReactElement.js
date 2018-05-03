@@ -1,14 +1,14 @@
 import { CurrentOwner } from "./top";
-import { isString, isFunction, isUndefined, isClass, isArray,isComposite,isVnode } from "./utils";
+import { isString, isFunction, isUndefined, isClass, isArray,isComposite,isVnode,isNotNullOrUndefined } from "./utils";
 import {
     NormalComponent,
     HostNode,
     TextNode,
     StateLessCompoent
 } from "./vNodes";
+import { isNumber } from "util";
 
 export function instantiateVNode(element) {
-    console.log(element)
     if (typeof element === "string") {
         return new TextNode(element);
     }
@@ -28,14 +28,27 @@ function mergeChildren(props, children) {
             ? props.children
             : [props.children]
         : children;
-    let child, mergedChildren=[];
-    while(child=children.pop()){
+    return transformChildren(children)
+}
+
+function transformChildren(children){
+    let child,i=children.length, mergedChildren=[];
+
+    while(i>0){
+        child=children.shift()
         if(isVnode(child)){
             mergedChildren.push(child)
         }else if(isArray(child)){
-            //@todo 
+            mergedChildren.push(transformChildren(child))
+        }else if(isString(child)||isNumber(child)){
+            mergedChildren.push(new TextNode(child))
+        }else if(child===null||child===undefined){
+            mergedChildren.push(child)
         }
+        i--;
     }
+    return mergedChildren
+
 }
 
 function mergeProps(type, props = {}, children) {
@@ -53,14 +66,15 @@ function mergeProps(type, props = {}, children) {
         if (propsName === "defaultValue") {
             newProps[value] = props.value || props.defaultVale;
         }
-        // if(propsName==='children'){
-        //     newProps.children=
-        // }
+        if (propsName === "children") {
+            return
+        }
         if (isString(type)) {
             //@Todo :dispose SVG
         }
         newProps[propsName] = props[propsName];
     });
+    
     return newProps;
 }
 

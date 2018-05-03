@@ -121,13 +121,14 @@ describe("ReactElement", () => {
             },
             a
         );
-        expect(element.props.children).toEqual([a]);
+        expect(element.props.children[0].text).toBe(1);
     });
     it("does not override children if no rest args are provided", () => {
         var element = React.createFactory(ComponentClass)({
             children: "text"
         });
-        expect(element.props.children).toEqual(["text"]);
+        expect(element.props.children[0].text).toEqual("text");
+        //offical expect(element.props.children).toEqual("text");
     });
     it("overrides children if null is provided as an argument", () => {
         var element = React.createFactory(ComponentClass)(
@@ -137,13 +138,17 @@ describe("ReactElement", () => {
             null
         );
         expect(element.props.children).toEqual([null]);
+        //offical expect(element.props.children).toEqual([null]);
     });
     it("merges rest arguments onto the children prop in an array", () => {
         var a = 1;
         var b = 2;
         var c = 3;
         var element = React.createFactory(ComponentClass)(null, a, b, c);
-        expect(element.props.children).toEqual([1, 2, 3]);
+        // offical expect(element.props.children).toEqual([1, 2, 3]);
+        expect(element.props.children[0].text).toBe(1);
+        expect(element.props.children[1].text).toBe(2);
+        expect(element.props.children[2].text).toBe(3);
     });
     it("allows static methods to be called using the type property", () => {
         class StaticMethodComponentClass extends React.Component {
@@ -226,5 +231,63 @@ describe("ReactElement", () => {
             container
         );
         // expect(inst2.props.prop).toBe(null);
+      });
+      it('throws when changing a prop (in dev) after element creation', () => {
+        var container = document.createElement("div");
+          
+        class Outer extends React.Component {
+          render() {
+            var el = <div className="moo" />;
+    
+            expect(function() {
+              el.props.className = 'quack';
+            }).toThrow();
+            expect(el.props.className).toBe('moo');
+    
+            return el;
+          }
+        }
+
+        var instance = React.render(
+            <Outer color="orange" />,
+            container
+        );
+        // var outer = ReactTestUtils.renderIntoDocument(<Outer color="orange" />);
+        expect(instance.vNode.dom.className).toBe('moo');
+      });
+      it('throws when adding a prop (in dev) after element creation', () => {
+        var container = document.createElement('div');
+        class Outer extends React.Component {
+          render() {
+            var el = <div>{this.props.sound}</div>;
+    
+            expect(function() {
+              el.props.className = 'quack';
+            }).toThrow();
+    
+            expect(el.props.className).toBe(undefined);
+    
+            return el;
+          }
+        }
+        Outer.defaultProps = {sound: 'meow'};
+        var outer = React.render(<Outer />, container);
+        expect(outer.vNode.dom.textContent).toBe('meow');
+        expect(outer.vNode.dom.className).toBe('');
+      });
+      it('does not warn for NaN props', () => {
+        var container = document.createElement('div');
+          
+        class Test extends React.Component {
+          render() {
+            return <div />;
+          }
+        }
+        var instance = React.render(
+            <Test value={+undefined} />,
+            container
+        );
+        // var test = ReactTestUtils.renderIntoDocument(<Test value={+undefined} />);
+        expect(instance.props.value).toBeNaN();
       });
 });
