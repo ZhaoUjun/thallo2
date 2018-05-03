@@ -9,6 +9,7 @@ export function createDomNode(
     parentComponent,
     isSvg = false
 ) {
+   
     const { tag } = vNode;
     let domNode;
     if (

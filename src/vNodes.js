@@ -91,6 +91,7 @@ export class TextNode {
     tag = NODE_TAG.TEXT;
 
     constructor(element) {
+        this.$$typeof=REACT_ELEMENT_TYPE
         this.text = element;
         this.dom = null;
         // Object.freeze(this);

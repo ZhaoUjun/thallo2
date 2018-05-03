@@ -1,7 +1,7 @@
 import { createDomNode } from "./createDomNode";
 import { NODE_TAG } from "./constant";
 import { reRenderComponent } from "./life-cycle/reRenderComponent";
-import { isSameNode, isNotNullOrUndefined } from "./utils";
+import { isSameNode, isNotNullOrUndefined,isString } from "./utils";
 import { updateAttr, removeAttr } from "./DomProperty";
 import Ref from "./Ref";
 import { unmount } from "./life-cycle/unmountComponent";
@@ -156,9 +156,19 @@ function addVnodes(parentElm, before, vnodes, startIdx, endIdx) {
     }
 }
 
+
+
 function removeVnodes(parentElm, vnodes, startIdx, endIdx) {
+
     for (; startIdx <= endIdx; ++startIdx) {
-        unmount(vnodes[startIdx], parentElm);
+        const vnode=vnodes[startIdx]
+            unmount(vnode, parentElm);
+        // if(isString(vnode)){
+        //     console.log(parentElm.children)
+        // }else{
+        //     console.log(parentElm.childNodes)            
+        
+        // }
     }
 }
 
@@ -179,4 +189,15 @@ function createKeyToOldIdx(children, beginIdx, endIdx) {
 
 function diffAttributes(preVNode, nextVNode, dom) {
     return patchAttr(preVNode, nextVNode, dom);
+}
+
+function removeText(from) {
+    if(Array.isArray(from)) {
+        const child = from[0].nextSibling;
+
+        child.parentNode.removeChild(child);
+    }
+    else {
+        from.textContent = '';
+    }
 }

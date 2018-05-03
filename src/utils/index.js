@@ -1,4 +1,4 @@
-import { EMPTY_OBJ, NODE_TAG } from "../constant";
+import { EMPTY_OBJ, NODE_TAG,REACT_ELEMENT_TYPE } from "../constant";
 
 export function isFunction(obj) {
     return typeof obj === "function";
@@ -69,6 +69,9 @@ export function isComponent(instance) {
     return instance && instance.isReactComponent === EMPTY_OBJ;
 }
 
+export function isVnode(vNode){
+     return isNotNullOrUndefined(vNode)&&vNode.$$typeof===REACT_ELEMENT_TYPE
+}
 export function isSameNode(a,b){
     return a.type===b.type&&a.key===b.key
 }

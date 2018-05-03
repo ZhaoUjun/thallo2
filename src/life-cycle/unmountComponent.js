@@ -5,7 +5,10 @@ import {
     isComponent,
     isFunction,
     isNotNullOrUndefined,
-    hasLifeCycle
+    hasLifeCycle,
+    isString,
+    isNumber,
+    isIterator
 } from "../utils";
 import Ref from "../Ref";
 // import { render } from '../ReactDom';
@@ -21,8 +24,7 @@ export function unmount(vNode,parentDom){
     ) {
         vNode.unmount(parentContext, parentComponent);
     } else if (isString(vNode) || isNumber(vNode)) {
-
-        
+        return
     } else if (isIterator(vNode)) {
         // domNode = window.document.createDocumentFragment();
         vNode.forEach(item => {
