@@ -1,6 +1,7 @@
-import { isFunction } from "./utils";
+import { isFunction,isObject,isArray,isNumber,isString } from "./utils";
 import { EMPTY_OBJ } from "./constant";
 import { enqueueRender } from "./render-queue";
+import {updateComponent } from './life-cycle/updateComponent'
 
 export class Component {
     _sync=false;
@@ -34,14 +35,20 @@ export class Component {
     }
 
     getState() {
-        let collector = {};
-        let s;
-        while ((s = this._pendingStates.pop())) {
+        if(isArray(this.state)||isNumber(this.state)||isString(this.state)){
+            throw 'Foo.state: must be set to an object or null'
+        }
+        let collector = {},initState=this.state||{},pendingState;
+        while ((pendingState = this._pendingStates.pop())) {
             collector = {
                 ...collector,
-                ...(isFunction(s) ? s.call(this, this.state, this.props) : s)
+                ...(isFunction(pendingState) ? pendingState.call(this, this.state, this.props) : pendingState)
             };
         }
-        return { ...this.state, ...collector };
+        return { ...initState, ...collector };
+    }
+
+    forceUpdate(){
+        updateComponent(this,true)
     }
 }

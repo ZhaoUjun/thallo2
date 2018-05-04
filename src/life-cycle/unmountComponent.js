@@ -76,10 +76,14 @@ function removeDom(vNode, parentDom) {
 }
 
 export function unmountTree(containerDom) {
-    const vNode = containerDom._component;
+    const vNode = containerDom._reactRootContainer;
     if (vNode) {
         vNode.unmount(containerDom);
-    } else {
+    } else {    
         containerDom.innerHtml = "";
     }
+}
+
+export function unmountComponentAtNode(containerDom){
+    unmountTree(containerDom)
 }

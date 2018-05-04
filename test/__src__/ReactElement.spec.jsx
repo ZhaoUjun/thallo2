@@ -14,7 +14,7 @@ describe("ReactElement", () => {
         expect(element.key).toBe(null);
         expect(element.ref).toBe(null);
         // expect(Object.isFrozen(element)).toBe(true);
-        // expect(Object.isFrozen(element.props)).toBe(true);
+        expect(Object.isFrozen(element.props)).toBe(true);
         expect(element.props).toEqual({});
     });
 
@@ -24,7 +24,7 @@ describe("ReactElement", () => {
         expect(element.key).toBe(null);
         expect(element.ref).toBe(null);
         // expect(Object.isFrozen(element)).toBe(true);
-        // expect(Object.isFrozen(element.props)).toBe(true);
+        expect(Object.isFrozen(element.props)).toBe(true);
         expect(element.props).toEqual({});
     });
     // it("returns an immutable element", () => {
@@ -55,7 +55,7 @@ describe("ReactElement", () => {
         expect(element.key).toBe("12");
         expect(element.ref).toBe("34");
         // expect(Object.isFrozen(element)).toBe(true);
-        // expect(Object.isFrozen(element.props)).toBe(true);
+        expect(Object.isFrozen(element.props)).toBe(true);
         expect(element.props).toEqual({
             foo: "56"
         });
@@ -71,7 +71,7 @@ describe("ReactElement", () => {
         expect(element.key).toBe(null);
         expect(element.ref).toBe(null);
         // expect(Object.isFrozen(element)).toBe(true);
-        // expect(Object.isFrozen(element.props)).toBe(true);
+        expect(Object.isFrozen(element.props)).toBe(true);
         expect(element.props).toEqual({
             foo: "12"
         });
@@ -91,7 +91,7 @@ describe("ReactElement", () => {
         expect(element.key).toBe("12");
         expect(element.ref).toBe(null);
         // expect(Object.isFrozen(element)).toBe(true);
-        // expect(Object.isFrozen(element.props)).toBe(true);
+        expect(Object.isFrozen(element.props)).toBe(true);
         expect(element.props).toEqual({ foo: "56" });
     });
     it("preserves the owner on the element", () => {

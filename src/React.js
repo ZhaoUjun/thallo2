@@ -1,13 +1,15 @@
-import {render} from "./ReactDom";
+import {render,findDOMNode} from "./ReactDom";
 import {createElement,createFactory} from "./ReactElement"
 import {Component} from './Component'
 import{isValidElement} from './utils/isValidElement'
+import {unmountComponentAtNode} from './life-cycle/unmountComponent'
 /**
  * Top API (done)
  * Component done
  * render done
  * createElement
  * createFactory
+ * unmountComponentAtNode
  * 
  * (todo)
  * Fragment
@@ -25,7 +27,9 @@ const React=window.React=window.reactDom={
     render,
     Component,
     createFactory,
-    isValidElement
+    isValidElement,
+    unmountComponentAtNode,
+    findDOMNode
 };
 
 

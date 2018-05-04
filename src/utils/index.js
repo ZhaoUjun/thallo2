@@ -13,7 +13,7 @@ export function isNumber(num) {
 }
 
 export function isIterator(obj){
-    return obj[Symbol.iterator]
+    return obj!==null&&typeof obj ==='object'&&obj[Symbol.iterator]
 }
 export function isUndefined(obj) {
     return typeof obj === "undefined";
@@ -25,6 +25,10 @@ export function isClass(elementType) {
         Boolean(elementType.prototype.isReactComponent)
     );
 }
+
+export function isObject(val) {
+    return val !== null && typeof val === 'object' && Array.isArray(val) === false;
+};
 
 export function isComposite(vNode) {
     return (NODE_TAG.NORMAL_COMPONENT | NODE_TAG.STATELESS) & vNode.tag;

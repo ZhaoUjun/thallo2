@@ -21,3 +21,7 @@ export function render(vnode, container, callback) {
     container._reactRootContainer = vnode;    
     return isComposite(vnode) ? vnode.component : dom;
 }
+
+export function findDOMNode(component){
+    return component.vNode.dom
+}
