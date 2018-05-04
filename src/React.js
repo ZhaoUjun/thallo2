@@ -9,16 +9,19 @@ import {unmountComponentAtNode} from './life-cycle/unmountComponent'
  * createElement
  * createFactory
  * unmountComponentAtNode
+ * cloneElement
+ * findDomNode
+ * 
+ * 
  * 
  * (todo)
  * Fragment
- * cloneElement
  * PureComponent
  * createPortal
  * createContext
  * createRef
  * Children
- * findDomNode
+
  */
 
 const React=window.React=window.reactDom={
