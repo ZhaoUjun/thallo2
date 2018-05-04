@@ -1,7 +1,6 @@
 import {render,findDOMNode} from "./ReactDom";
-import {createElement,createFactory} from "./ReactElement"
+import {createElement,createFactory,cloneElement,isValidElement} from "./ReactElement"
 import {Component} from './Component'
-import{isValidElement} from './utils/isValidElement'
 import {unmountComponentAtNode} from './life-cycle/unmountComponent'
 /**
  * Top API (done)
@@ -29,7 +28,8 @@ const React=window.React=window.reactDom={
     createFactory,
     isValidElement,
     unmountComponentAtNode,
-    findDOMNode
+    findDOMNode,
+    cloneElement
 };
 
 

@@ -7,6 +7,7 @@ import {
     StateLessCompoent
 } from "./vNodes";
 import { isNumber } from "util";
+import{REACT_ELEMENT_TYPE} from './constant'
 
 export function instantiateVNode(element) {
     if (typeof element === "string") {
@@ -88,3 +89,32 @@ export function createFactory(type) {
     element.type = type;
     return element;
 }
+
+export function cloneElement(element,config,...children){
+    const {type}=element;
+    const defaultProps =type&&type.defaultProps;
+    let  props={...element.props,...config};
+    if(defaultProps){
+        props={...defaultProps,...props}
+    }
+    if(children.length>0){
+        props.children=children;
+    }
+    const newConfig={...element,...config,props};
+    const newElement=Object.create(Object.getPrototypeOf(element))
+    Object.keys(newConfig).forEach(key=>{
+        newElement[key]=newConfig[key]
+    })
+    return newElement
+}
+
+
+export function isValidElement(object) {
+    return (
+      typeof object === 'object' &&
+      object !== null &&
+      object.$$typeof === REACT_ELEMENT_TYPE
+    );
+  };
+
+
