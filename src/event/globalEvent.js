@@ -1,19 +1,30 @@
 import { SyntheticEvent } from './SyntheticEvent'
 
 const globalEventCollects = new WeakMap();
-const eventPool=new Map();
+const eventPool=new WeakMap();
 const eventCount = Object.create(null);// sum the same type event 
 
 const globalListner = function(e) {
-    let { type, target } = e;
+    let { type, target } = e,
+        syntheticEvent=eventPool.get(type)
+    ;
     while (target && target !== document) {
         if (
             globalEventCollects.has(target) &&
             globalEventCollects.get(target)[type]
         ) {
-            globalEventCollects.get(target)[type](new SyntheticEvent(type,e));
+            const handler =globalEventCollects.get(target)[type]
+            handler(syntheticEvent||(syntheticEvent=new SyntheticEvent(type,e)));
+            if(syntheticEvent.isPropagationStopped()){
+                return 
+            }
         }
         target = target.parentNode;
+    }
+    if(syntheticEvent._isPersisted&&!eventPool.has(type)){
+        eventPool.set(type,syntheticEvent)
+    }else{
+        //@todo nullify syntheticEvent
     }
 };
 

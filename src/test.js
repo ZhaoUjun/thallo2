@@ -22,11 +22,17 @@ export class Test extends Component {
             // console.log(this.state)        
         },3000)
     }
+    handleClick=(e)=>{
+        console.log(e)
+        setTimeout(function(){
+            console.log(e)
+        },10)
+    }
     render() {
         const { color } = this.props;
         const { fontSize } =this.state;
         return (
-            <div style={{ color,fontSize }} ref="test" onClick={(e)=>{console.log(e)}}>
+            <div style={{ color,fontSize }} ref="test" onClick={this.handleClick}>
                 test
                 <a href="www.baidu.com" ref={node => console.log(node)}>
                     click
