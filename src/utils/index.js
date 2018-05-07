@@ -1,4 +1,4 @@
-import { EMPTY_OBJ, NODE_TAG } from "../constant";
+import { EMPTY_OBJ, NODE_TAG,REACT_ELEMENT_TYPE } from "../constant";
 
 export function isFunction(obj) {
     return typeof obj === "function";
@@ -13,7 +13,7 @@ export function isNumber(num) {
 }
 
 export function isIterator(obj){
-    return obj[Symbol.iterator]
+    return obj!==null&&typeof obj ==='object'&&obj[Symbol.iterator]
 }
 export function isUndefined(obj) {
     return typeof obj === "undefined";
@@ -25,6 +25,10 @@ export function isClass(elementType) {
         Boolean(elementType.prototype.isReactComponent)
     );
 }
+
+export function isObject(val) {
+    return val !== null && typeof val === 'object' && Array.isArray(val) === false;
+};
 
 export function isComposite(vNode) {
     return (NODE_TAG.NORMAL_COMPONENT | NODE_TAG.STATELESS) & vNode.tag;
@@ -69,6 +73,9 @@ export function isComponent(instance) {
     return instance && instance.isReactComponent === EMPTY_OBJ;
 }
 
+export function isVnode(vNode){
+     return isNotNullOrUndefined(vNode)&&vNode.$$typeof===REACT_ELEMENT_TYPE
+}
 export function isSameNode(a,b){
     return a.type===b.type&&a.key===b.key
 }
@@ -80,5 +87,9 @@ export function defer(fun, ...args) {
 }
 
 export function hasLifeCycle(name ,component){
-    return component[name]&&isFunction(component[name])
+    return component&&component[name]&&isFunction(component[name])
+}
+
+export function objHasNullProp(propName,obj){
+    return Object.prototype.hasOwnProperty.call(obj,propName)&&Object[propName]===null
 }

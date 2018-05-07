@@ -9,7 +9,8 @@ export function createDomNode(
     parentComponent,
     isSvg = false
 ) {
-    const { tag } = vNode;
+   
+    const  tag  = vNode&&vNode.tag;
     let domNode;
     if (
         tag &
@@ -26,6 +27,8 @@ export function createDomNode(
         vNode.forEach(item => {
             domNode.appendChild(createDomNode(item,parentContext,parentComponent));
         });
+    }else{
+        domNode = window.document.createTextNode('');
     }
     return domNode;
 }

@@ -5,10 +5,31 @@ import {
     isComponent,
     isFunction,
     isNotNullOrUndefined,
-    hasLifeCycle
+    hasLifeCycle,
+    isString,
+    isNumber,
+    isIterator
 } from "../utils";
 import Ref from "../Ref";
 // import { render } from '../ReactDom';
+
+export function unmount(vNode,parentDom){
+    const{tag,}=vNode
+    if (
+        tag &
+        (NODE_TAG.NORMAL_COMPONENT |
+            NODE_TAG.STATELESS |
+            NODE_TAG.NODE |
+            NODE_TAG.TEXT)
+    ) {
+        vNode.unmount(parentDom);
+    } else if (isIterator(vNode)) {
+        // domNode = window.document.createDocumentFragment();
+        vNode.forEach(item => {
+            unmount(item,parentDom)
+        });
+    }
+}
 
 export function unmountComponent(vNode, parentDom) {
     const { component, _rendered, dom } = vNode;
@@ -55,10 +76,14 @@ function removeDom(vNode, parentDom) {
 }
 
 export function unmountTree(containerDom) {
-    const vNode = containerDom._component;
+    const vNode = containerDom._reactRootContainer;
     if (vNode) {
         vNode.unmount(containerDom);
-    } else {
+    } else {    
         containerDom.innerHtml = "";
     }
+}
+
+export function unmountComponentAtNode(containerDom){
+    unmountTree(containerDom)
 }

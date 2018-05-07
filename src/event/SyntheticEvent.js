@@ -20,7 +20,7 @@ export class SyntheticEvent {
         }
     }
 
-    isPropagationStopped() {
+    get isPropagationStopped() {
         return this._isPropagationStopped;
     }
 
@@ -51,5 +51,15 @@ export class SyntheticEvent {
 
     toString () {
         return "[object Event]";
+    }
+
+    nullify(){
+        this.type = null;
+        this.target = null;
+        this.nativeEvent = null;
+        this.timeStamp = null;
+        this._isPropagationStopped = false;
+        this._isDefaultPrevented = false;
+        this._isPersisted = false;
     }
 }

@@ -1,5 +1,10 @@
-export function getChildContext(vNode, parentContext = {}) {
-    return vNode.context
-        ? { ...vNode.context, ...parentContext }
+import{isFunction} from './index'
+export function getChildContext(component, parentContext = {}) {
+    let childContext;
+    if(isFunction(component.getChildContext)){
+        childContext=component.getChildContext()
+    }
+    return childContext
+        ? { ...childContext, ...parentContext }
         : parentContext;
 }

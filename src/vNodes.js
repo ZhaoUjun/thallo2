@@ -1,24 +1,27 @@
-import { isClass, getChildrenfromProps,isString,isFunction } from "./utils";
+import { isClass, getChildrenfromProps,isString,isFunction,objHasNullProp } from "./utils";
 import { reRenderComponent } from "./life-cycle/reRenderComponent";
 import { mountComponent,mountStateLessComponent } from "./life-cycle/mountComponent";
 import {
     unmountComponent,
     unmountHostNode,
-    unmountStateLessComponent
+    unmountStateLessComponent,
+    unmountTextNode
 } from "./life-cycle/unmountComponent";
-import { NODE_TAG } from "./constant";
+import { NODE_TAG,REACT_ELEMENT_TYPE } from "./constant";
 import { mountVNode } from "./createDomNode";
 
 function Base (props,type){
     this.type = type;
     this._owner = props.owner;
     delete props.owner;
-    if ((this.ref = props.ref)) {
-        delete props.ref ;
-    }
-    this.props = props;
-    this.key = props.key || null;
+    this.ref=props.ref||null;
+    delete props.ref;
+    this.key = props.key?(''+props.key):null;
+    delete props.key;
     this.dom = null;
+    this.$$typeof=REACT_ELEMENT_TYPE
+    this.props = props;
+   
 }
 
 export class NormalComponent {
@@ -29,6 +32,8 @@ export class NormalComponent {
         Base.call(this,props,type)
         this.name =type.name || type.toString().match(/^function\s*([^\s(]+)/)[1];
         type.displayName = this.name;
+        // Object.freeze(this);
+        Object.freeze(props)
     }
 
     mount(parentContext, parentComponent) {
@@ -50,10 +55,11 @@ export class StateLessCompoent{
     constructor(element) {
         const { props, type } = element;
         Base.call(this,props,type)
+        // Object.freeze(this);
+        Object.freeze(props)
     }
 
     mount(parentContext, parentComponent) {
-        
         return mountStateLessComponent(this, parentContext, parentComponent);
     }
 
@@ -69,6 +75,8 @@ export class HostNode {
         const { props, type } = element;
         Base.call(this,props,type)
         this.namespace = props.namespace;
+        // Object.freeze(this);
+        Object.freeze(props)
     }
 
     mount(parentContext, parentComponent) {
@@ -84,8 +92,10 @@ export class TextNode {
     tag = NODE_TAG.TEXT;
 
     constructor(element) {
+        this.$$typeof=REACT_ELEMENT_TYPE
         this.text = element;
         this.dom = null;
+        // Object.freeze(this);
     }
 
     mount(parentContext, parentComponent) {
@@ -94,6 +104,6 @@ export class TextNode {
     }
 
     unmount(parentDom) {
-        return unmountHostNode(this, parentDom);
+        return unmountTextNode(this, parentDom);
     }
 }

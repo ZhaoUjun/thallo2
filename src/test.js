@@ -1,4 +1,5 @@
-import { Component } from "./React";
+import { Component } from "./Component";
+
 export function Button() {
     return <a href="www.baidu.com">click</a>;
 }
@@ -23,10 +24,12 @@ export class Test extends Component {
         },3000)
     }
     handleClick=(e)=>{
-        console.log(e)
-        setTimeout(function(){
-            console.log(e)
-        },10)
+        console.log('click1')
+       
+    }
+    handleClick2=(e)=>{
+        e.stopPropagation()
+        console.log('click2')
     }
     render() {
         const { color } = this.props;
@@ -39,6 +42,7 @@ export class Test extends Component {
                 </a>
                 <StateLess color={color}/>   
                 {[1,2,3].map(item=><div key={item}>{item}</div> )}
+                <button onClick={this.handleClick2}>click2</button>
             </div>
         );
     }

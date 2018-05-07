@@ -1,30 +1,38 @@
-import { SyntheticEvent } from './SyntheticEvent'
-
+import { SyntheticEvent } from "./SyntheticEvent";
 const globalEventCollects = new WeakMap();
-const eventPool=new WeakMap();
-const eventCount = Object.create(null);// sum the same type event 
+// const eventPool = new Map(); @todo make event pooled
+const eventCount = Object.create(null); // sum the same type event
 
 const globalListner = function(e) {
     let { type, target } = e,
-        syntheticEvent=eventPool.get(type)
-    ;
-    while (target && target !== document) {
+        count = eventCount[type],
+        syntheticEvent,
+        handler;
+    while (count > 0 && target) {
         if (
             globalEventCollects.has(target) &&
-            globalEventCollects.get(target)[type]
+            (handler = globalEventCollects.get(target)[type])
         ) {
-            const handler =globalEventCollects.get(target)[type]
-            handler(syntheticEvent||(syntheticEvent=new SyntheticEvent(type,e)));
-            if(syntheticEvent.isPropagationStopped()){
-                return 
+            handler(
+                syntheticEvent || (syntheticEvent = new SyntheticEvent(type, e))
+            );
+            count--;
+            if (syntheticEvent.isPropagationStopped) {
+                return;
             }
+        }
+        if (target === document) {
+            return;
         }
         target = target.parentNode;
     }
-    if(syntheticEvent._isPersisted&&!eventPool.has(type)){
-        eventPool.set(type,syntheticEvent)
-    }else{
-        //@todo nullify syntheticEvent
+    if(!syntheticEvent._isPersisted){
+        /**
+         * it will be nullify after in the end of this tick
+         *  https://reactjs.org/docs/events.html#ui-events
+         */
+      
+        syntheticEvent.nullify()
     }
 };
 
@@ -35,7 +43,7 @@ export const globalEvent = {
             eventCount[name] = 0;
             document.addEventListener(name, globalListner);
         } else {
-            handlers = globalEventCollects.get(dom);
+            handlers = globalEventCollects.get(dom)||Object.create(null);
         }
         handlers[name] = handler;
         eventCount[name]++;

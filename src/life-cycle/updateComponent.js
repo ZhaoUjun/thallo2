@@ -10,6 +10,7 @@ import {
 import { CurrentOwner, mountedComponents } from "../top";
 import { createDomNode } from "../createDomNode";
 import { getChildContext } from "../utils/getChildContext";
+import {renderComponent} from './mountComponent'
 import Ref from "../Ref";
 import diff from "../diff";
 
@@ -25,7 +26,7 @@ export function updateComponent(component, isForce) {
         hasLifeCycle('shouldComponentUpdate',component)
     ) {
         shouldSkip =
-            component.shouldComponentUpdate(props, state, context) && !isForce;
+            isForce||!component.shouldComponentUpdate(props, state, context) ;
     }
     if (
         hasLifeCycle('getSnapshotBeforeUpdate',component)
@@ -43,9 +44,7 @@ export function updateComponent(component, isForce) {
             component.componentWillUpdate(props, state);
         }
         const lastRendered = vNode._rendered;
-        CurrentOwner.current = component;
-        const rendered = (vNode._rendered = component.render());
-        CurrentOwner.current = null;
+        const rendered=renderComponent(vNode,component)
         const parentDom = lastRendered.dom && lastRendered.dom.parentNode;
         vNode.dom = diff(lastRendered, rendered, parentDom);
     }

@@ -7,6 +7,11 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
     entry: {
       React: './src/index.js',
     },
+    resolve:{
+      alias:{
+        react:path.resolve(__dirname+'src/React')
+      }
+    },
     devtool: 'cheap-module-source-map',
     devServer: {
      contentBase: './dist'

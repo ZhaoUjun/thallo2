@@ -6,7 +6,7 @@ import Ref from "../Ref";
 export function reRenderComponent(preVnode, nextVnode) {
     const preProps = preVnode.props;
     const nextProps = nextVnode.props;
-    const component = (nextVnode.component = preProps.component);
+    const component = (nextVnode.component = preVnode.component);
     component._disable = true; //avoid updating again when call setState in this hook
     if (hasLifeCycle("componentWillReceiveProps", component)) {
         component.componentWillReceiveProps(nextProps);
@@ -15,6 +15,9 @@ export function reRenderComponent(preVnode, nextVnode) {
     component.preProps = preProps;
     component.preState = component.state;
     component.preContext = component.context;
+    component.props=nextProps;
+    component.vNode=nextVnode;
+    nextVnode._rendered=preVnode._rendered;
     if (isNotNullOrUndefined(nextVnode.ref)) {
         Ref.update(preProps, nextVnode);
     }
