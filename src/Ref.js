@@ -26,6 +26,9 @@ export default {
                 return;
             }
             const inst = vnode._owner;
+            if(inst===null){
+                throw new Error('cannot supply a ref outside of render method')
+            }
             if (inst && isFunction(inst.render)) {
                 inst.refs[ref] = node;
             }

@@ -1,10 +1,10 @@
 import { createDomNode } from "./createDomNode";
-import { isComposite ,isFunction} from "./utils";
+import { isComposite ,isFunction,isValidContainer} from "./utils";
 import diff from './diff'
 
 export function render(vnode, container, callback) {
-    if(!container){
-        console.error('container must be DomElement')
+    if(!isValidContainer(container)){
+        throw new Error('Target container is not a DOM element.asda')
     }
     let dom;
     if(container._reactRootContainer){

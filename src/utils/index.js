@@ -95,6 +95,9 @@ export function objHasNullProp(propName,obj){
 }
 
 export function isValidContainer(dom){
+    if(!isNotNullOrUndefined(dom)){
+        return false
+    }
     if(!dom.nodeType){
         return false
     }

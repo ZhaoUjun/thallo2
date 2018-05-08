@@ -70,15 +70,15 @@ export function mountComponent(vNode, parentContext, parentComponent) {
         component.state = component.getState();
     }
     const rendered=renderComponent(vNode,component)
-    if (hasLifeCycle('componentDidMount',component)) {
-        component.componentDidMount();
-    }
     const dom = (vNode.dom = createDomNode(
         rendered,
         getChildContext(component, parentContext),
         parentComponent,
         false
     ));
+    if (hasLifeCycle('componentDidMount',component)) {
+        component.componentDidMount();
+    }
     if (isNotNullOrUndefined(ref)) {
         Ref.attach(vNode, ref, vNode.dom);
     }
