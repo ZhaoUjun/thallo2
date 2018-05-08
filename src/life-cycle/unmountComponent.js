@@ -8,7 +8,8 @@ import {
     hasLifeCycle,
     isString,
     isNumber,
-    isIterator
+    isIterator,
+    isValidContainer
 } from "../utils";
 import Ref from "../Ref";
 // import { render } from '../ReactDom';
@@ -79,11 +80,16 @@ export function unmountTree(containerDom) {
     const vNode = containerDom._reactRootContainer;
     if (vNode) {
         vNode.unmount(containerDom);
+        return true
     } else {    
         containerDom.innerHtml = "";
+        return false
     }
 }
 
 export function unmountComponentAtNode(containerDom){
-    unmountTree(containerDom)
+    if(!isValidContainer(containerDom)){
+        throw  new Error('unmountComponentAtNode(...): Target container is not a DOM element.')
+    }
+    return unmountTree(containerDom)
 }

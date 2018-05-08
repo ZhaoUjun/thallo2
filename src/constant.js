@@ -10,6 +10,14 @@ export const NODE_TAG = {
     PORTAL: 16
 };
 
+export const HTMLNodeType = {
+    ELEMENT_NODE: 1,
+    TEXT_NODE: 3,
+    COMMENT_NODE: 8,
+    DOCUMENT_NODE: 9,
+    DOCUMENT_FRAGMENT_NODE: 11
+};
+
 export const REACT_ELEMENT_TYPE =
     (typeof Symbol === "function" &&
         Symbol.for &&

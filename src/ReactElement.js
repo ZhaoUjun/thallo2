@@ -93,6 +93,9 @@ function mergeProps(type, props = {}, children) {
 }
 
 export function createElement(type, props, ...args) {
+    if(type==='comment'){
+        console.log(type)
+    }
     props = props || {};
     return instantiateVNode({ type, props: mergeProps(type, props, args) });
 }

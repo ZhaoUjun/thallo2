@@ -16,7 +16,7 @@ export function render(vnode, container, callback) {
         container.appendChild(dom);
     }
     if(isFunction(callback)){
-        callback()
+        callback.call(dom)
     }
     container._reactRootContainer = vnode;    
     return isComposite(vnode) ? vnode.component : dom;

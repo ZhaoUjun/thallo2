@@ -9,12 +9,17 @@ import { unmount } from "./life-cycle/unmountComponent";
 export default function diff(preVNode, nextVNode, prarentDom, isSvg) {
     let dom = window.document.createTextNode("");
     if (isSameNode(preVNode, nextVNode)) {
+   
         if (nextVNode.tag & NODE_TAG.NORMAL_COMPONENT) {
             dom = reRenderComponent(preVNode, nextVNode);
         } else if (nextVNode.tag & NODE_TAG.STATELESS) {
             dom = reRenderStateLess(preVNode, nextVNode, prarentDom);
         } else if (nextVNode.tag & NODE_TAG.NODE) {
             dom = diffHostNode(preVNode, nextVNode, isSvg);
+        } else if(nextVNode.tag&NODE_TAG.TEXT){
+            preVNode.unmount(prarentDom);
+            dom = createDomNode(nextVNode);
+            prarentDom.appendChild(dom);
         }
     } else {
         preVNode.unmount(prarentDom);
@@ -105,7 +110,7 @@ function diffChildren(parentElm, oldCh, newCh) {
             newEndVnode = newCh[--newEndIdx];
         } else if (isSameNode(oldEndVnode, newStartVnode)) {
             // Vnode moved left
-            patchVnode(oldEndVnode, newStartVnode, insertedVnodeQueue);
+            diff(oldEndVnode, newEndVnode, parentElm);
             parentElm.insertBefore(oldEndVnode.dom, oldStartVnode.dom);
             oldEndVnode = oldCh[--oldEndIdx];
             newStartVnode = newCh[++newStartIdx];

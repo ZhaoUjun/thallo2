@@ -1,4 +1,4 @@
-import { EMPTY_OBJ, NODE_TAG,REACT_ELEMENT_TYPE } from "../constant";
+import { EMPTY_OBJ, NODE_TAG,REACT_ELEMENT_TYPE,HTMLNodeType } from "../constant";
 
 export function isFunction(obj) {
     return typeof obj === "function";
@@ -92,4 +92,11 @@ export function hasLifeCycle(name ,component){
 
 export function objHasNullProp(propName,obj){
     return Object.prototype.hasOwnProperty.call(obj,propName)&&Object[propName]===null
+}
+
+export function isValidContainer(dom){
+    if(!dom.nodeType){
+        return false
+    }
+    return Object.keys(HTMLNodeType).some(type=>HTMLNodeType[type]===dom.nodeType)
 }
