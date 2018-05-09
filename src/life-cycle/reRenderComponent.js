@@ -1,8 +1,7 @@
 import { updateComponent } from "./updateComponent";
 import { CurrentOwner } from "../top";
 import { isFunction, isNotNullOrUndefined, hasLifeCycle } from "../utils";
-import Ref from "../Ref";
-
+import {readyWorks} from '../top'
 export function reRenderComponent(preVnode, nextVnode) {
     const preProps = preVnode.props;
     const nextProps = nextVnode.props;
@@ -18,5 +17,6 @@ export function reRenderComponent(preVnode, nextVnode) {
     component.props=nextProps;
     component.vNode=nextVnode;
     nextVnode._rendered=preVnode._rendered;
+    readyWorks.add(preVnode,nextVnode);    
     return updateComponent(component,false,preVnode);
 }

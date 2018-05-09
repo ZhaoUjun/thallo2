@@ -11,7 +11,6 @@ import { CurrentOwner, mountedComponents,readyWorks } from "../top";
 import { createDomNode } from "../createDomNode";
 import { getChildContext } from "../utils/getChildContext";
 import {renderComponent} from './mountComponent'
-import Ref from "../Ref";
 import diff from "../diff";
 
 export function updateComponent(component, isForce,preVnode) {
@@ -44,9 +43,8 @@ export function updateComponent(component, isForce,preVnode) {
         ) {
             component.componentWillUpdate(props, state);
         }
-        readyWorks.add(preVnode,vNode);
         const lastRendered = vNode._rendered;
-        const rendered=renderComponent(vNode,component)
+        const rendered=renderComponent(vNode,component);
         const parentDom = lastRendered.dom && lastRendered.dom.parentNode;
         vNode.dom = diff(lastRendered, rendered, parentDom);
     }

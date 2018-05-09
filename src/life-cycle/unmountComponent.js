@@ -12,7 +12,6 @@ import {
     isValidContainer
 } from "../utils";
 import Ref from "../Ref";
-// import { render } from '../ReactDom';
 
 export function unmount(vNode,parentDom){
     const{tag,}=vNode
@@ -80,9 +79,11 @@ export function unmountTree(containerDom) {
     const vNode = containerDom._reactRootContainer;
     if (vNode) {
         vNode.unmount(containerDom);
+        delete containerDom._reactRootContainer
         return true
     } else {    
         containerDom.innerHtml = "";
+        delete containerDom._reactRootContainer        
         return false
     }
 }

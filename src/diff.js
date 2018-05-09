@@ -127,13 +127,13 @@ function diffChildren(parentElm, oldCh, newCh) {
                 newStartVnode = newCh[++newStartIdx];
             } else {
                 elmToMove = oldCh[idxInOld];
-                if (elmToMove.sel !== newStartVnode.sel) {
+                if (elmToMove.type !== newStartVnode.type) {
                     parentElm.insertBefore(
                         createDomNode(newStartVnode),
                         oldStartVnode.dom
                     );
                 } else {
-                    diff(elmToMove, newStartVnode);
+                    diff(elmToMove, newStartVnode,parentElm);
                     oldCh[idxInOld] = undefined;
                     parentElm.insertBefore(elmToMove.dom, oldStartVnode.dom);
                 }

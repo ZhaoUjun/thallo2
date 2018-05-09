@@ -13,7 +13,6 @@ import {
 import { CurrentOwner } from "../top";
 import { createDomNode } from "../createDomNode";
 import { getChildContext } from "../utils/getChildContext";
-import Ref from "../Ref";
 
 function instanizeComponent(vNode,parentContext){
     const { type,props } = vNode;
@@ -53,6 +52,7 @@ export function renderComponent(vNode,component){
     CurrentOwner.current = component;
     rendered = vNode._rendered = component.render();
     CurrentOwner.current = null;
+    
     return rendered
 }
 
