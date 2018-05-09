@@ -9,7 +9,7 @@ import {
 } from "./life-cycle/unmountComponent";
 import { NODE_TAG,REACT_ELEMENT_TYPE } from "./constant";
 import { mountVNode } from "./createDomNode";
-
+import {readyWorks} from'./top'
 function Base (props,type){
     this.type = type;
     this._owner = props.owner;
@@ -37,10 +37,12 @@ export class NormalComponent {
     }
 
     mount(parentContext, parentComponent) {
+        readyWorks.add(null,this)
         return mountComponent(this, parentContext, parentComponent);
     }
 
     update(previous, current) {
+   
         reRenderComponent(previous, this);
     }
 

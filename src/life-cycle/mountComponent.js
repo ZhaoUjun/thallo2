@@ -69,6 +69,7 @@ export function mountComponent(vNode, parentContext, parentComponent) {
         component.componentWillMount();
         component.state = component.getState();
     }
+    
     const rendered=renderComponent(vNode,component)
     const dom = (vNode.dom = createDomNode(
         rendered,
@@ -76,12 +77,6 @@ export function mountComponent(vNode, parentContext, parentComponent) {
         parentComponent,
         false
     ));
-    if (hasLifeCycle('componentDidMount',component)) {
-        component.componentDidMount();
-    }
-    if (isNotNullOrUndefined(ref)) {
-        Ref.attach(vNode, ref, vNode.dom);
-    }
     component._disable = false;
     return dom;
 }

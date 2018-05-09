@@ -1,6 +1,7 @@
 import { createDomNode } from "./createDomNode";
 import { isComposite ,isFunction,isValidContainer} from "./utils";
 import diff from './diff'
+import {readyWorks} from './top'
 
 export function render(vnode, container, callback) {
     if(!isValidContainer(container)){
@@ -18,6 +19,7 @@ export function render(vnode, container, callback) {
     if(isFunction(callback)){
         callback.call(dom)
     }
+    readyWorks.flushWorks()    
     container._reactRootContainer = vnode;    
     return isComposite(vnode) ? vnode.component : dom;
 }

@@ -9,7 +9,6 @@ import { unmount } from "./life-cycle/unmountComponent";
 export default function diff(preVNode, nextVNode, prarentDom, isSvg) {
     let dom = window.document.createTextNode("");
     if (isSameNode(preVNode, nextVNode)) {
-        console.log(preVNode)
         if (nextVNode.tag & NODE_TAG.NORMAL_COMPONENT) {
             dom = reRenderComponent(preVNode, nextVNode);
         } else if (nextVNode.tag & NODE_TAG.STATELESS) {

@@ -36,14 +36,14 @@ export default {
     },
     detach(vnode, ref, domNode) {
         const node = isComposite(vnode) ? vnode.component : domNode;
-        // if (isFunction(ref)) {
-        //     ref(null);
-        // } else if (isString(ref)) {
-        //     const inst = vnode._owner;
-        //     if (inst.refs[ref] === node && isFunction(inst.render)) {
-        //         delete inst.refs[ref];
-        //     }
-        // }
+        if (isFunction(ref)) {
+            ref(null);
+        } else if (isString(ref)) {
+            const inst = vnode._owner;
+            if (inst.refs[ref] === node && isFunction(inst.render)) {
+                delete inst.refs[ref];
+            }
+        }
         if (isString(ref)) {
             const inst = vnode._owner;
             if (inst.refs[ref] === node && isFunction(inst.render)) {

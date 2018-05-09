@@ -18,8 +18,5 @@ export function reRenderComponent(preVnode, nextVnode) {
     component.props=nextProps;
     component.vNode=nextVnode;
     nextVnode._rendered=preVnode._rendered;
-    if (isNotNullOrUndefined(nextVnode.ref)) {
-        Ref.update(preProps, nextVnode);
-    }
-    return updateComponent(component);
+    return updateComponent(component,false,preVnode);
 }

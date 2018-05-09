@@ -266,52 +266,78 @@ describe('ReactComponent', () => {
     React.render(<Outer />, el);
     log.push('start update');
     React.render(<Outer />, el);
-    console.log('heree')
     log.push('start unmount');
     React.unmountComponentAtNode(el);
-    console.log(log)
-    /* eslint-disable indent */
     expect(log).toEqual([
       'start mount',
       'inner 1 render',
       'inner 2 render',
-      'inner 1 componentDidMount',
-      'ref 1 got instance 1',
       'inner 2 componentDidMount',
       'ref 2 got instance 2',
+      'inner 1 componentDidMount',
+      'ref 1 got instance 1',
       'outer componentDidMount',
       'start update',
       // Previous (equivalent) refs get cleared
       // Fiber renders first, resets refs later
-      // 'inner 1 render',
-      // 'inner 2 render',
-      // 'ref 1 got null',
-      // 'ref 2 got null',
-      'inner 1 componentDidUpdate',
-      'ref 1 got instance 1',
+      'inner 1 render',
+      'inner 2 render',
       'inner 2 componentDidUpdate',
+      'ref 2 got null',
       'ref 2 got instance 2',
+      'inner 1 componentDidUpdate',
+      'ref 1 got null',
+      'ref 1 got instance 1',
       'outer componentDidUpdate',
       'start unmount',
       'outer componentWillUnmount',
-      'ref 1 got null',
       'inner 1 componentWillUnmount',
-      'ref 2 got null',
+      'ref 1 got null',
       'inner 2 componentWillUnmount',
+      'ref 2 got null',
     ]);
+    /* eslint-disable indent */
+    // expect(log).toEqual([
+    //   'start mount',
+    //   'inner 1 render',
+    //   'inner 2 render',
+    //   'inner 1 componentDidMount',
+    //   'ref 1 got instance 1',
+    //   'inner 2 componentDidMount',
+    //   'ref 2 got instance 2',
+    //   'outer componentDidMount',
+    //   'start update',
+    //   // Previous (equivalent) refs get cleared
+    //   // Fiber renders first, resets refs later
+    //   'inner 1 render',
+    //   'inner 2 render',
+    //   'ref 1 got null',
+    //   'ref 2 got null',
+    //   'inner 1 componentDidUpdate',
+    //   'ref 1 got instance 1',
+    //   'inner 2 componentDidUpdate',
+    //   'ref 2 got instance 2',
+    //   'outer componentDidUpdate',
+    //   'start unmount',
+    //   'outer componentWillUnmount',
+    //   'ref 1 got null',
+    //   'inner 1 componentWillUnmount',
+    //   'ref 2 got null',
+    //   'inner 2 componentWillUnmount',
+    // ]);
     /* eslint-enable indent */
   });
 
-  // it('fires the callback after a component is rendered', () => {
-  //   var callback = jest.fn();
-  //   var container = document.createElement('div');
-  //   React.render(<div />, container, callback);
-  //   expect(callback.mock.calls.length).toBe(1);
-  //   React.render(<div className="foo" />, container, callback);
-  //   expect(callback.mock.calls.length).toBe(2);
-  //   React.render(<span />, container, callback);
-  //   expect(callback.mock.calls.length).toBe(3);
-  // });
+  it('fires the callback after a component is rendered', () => {
+    var callback = jasmine.createSpy();
+    var container = document.createElement('div');
+    React.render(<div />, container, callback);
+    expect(callback.calls.count()).toBe(1);
+    React.render(<div className="foo" />, container, callback);
+    expect(callback.calls.count()).toBe(2);
+    React.render(<span />, container, callback);
+    expect(callback.calls.count()).toBe(3);
+  });
 
   // it('throws usefully when rendering badly-typed elements', () => {
   //   spyOn(console, 'error');

@@ -1,5 +1,5 @@
 import { updateComponent } from "./life-cycle/updateComponent";
-import { dirtyComponent } from "./top";
+import { dirtyComponents,readyWorks } from "./top";
 import { defer } from "./utils";
 
 export function enqueueRender (component) {
@@ -10,7 +10,7 @@ export function enqueueRender (component) {
     if (
         !component._dirty &&
         (component._dirty = true) &&
-        dirtyComponent.push(component)
+        dirtyComponents.push(component)
     ) {
         defer(flushQueue);
     }
@@ -18,9 +18,10 @@ export function enqueueRender (component) {
 
 function flushQueue() {
     let component;
-    while ((component = dirtyComponent.pop())) {
+    while ((component = dirtyComponents.pop())) {
         if (component._dirty) {
             updateComponent(component);
         }
     }
+    readyWorks.flushWorks()
 }

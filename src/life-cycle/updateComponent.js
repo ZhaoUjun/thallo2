@@ -7,14 +7,14 @@ import {
     isNotNullOrUndefined,
     hasLifeCycle
 } from "../utils";
-import { CurrentOwner, mountedComponents } from "../top";
+import { CurrentOwner, mountedComponents,readyWorks } from "../top";
 import { createDomNode } from "../createDomNode";
 import { getChildContext } from "../utils/getChildContext";
 import {renderComponent} from './mountComponent'
 import Ref from "../Ref";
 import diff from "../diff";
 
-export function updateComponent(component, isForce) {
+export function updateComponent(component, isForce,preVnode) {
     component.state = component.getState();
     const { vNode, props, state, context } = component;
     const preProps = component.preProps || props;
@@ -36,6 +36,7 @@ export function updateComponent(component, isForce) {
             preState,
             preContext
         );
+        component.snapShot=snapShot;
     }
     if (!shouldSkip) {
         if (
@@ -43,6 +44,7 @@ export function updateComponent(component, isForce) {
         ) {
             component.componentWillUpdate(props, state);
         }
+        readyWorks.add(preVnode,vNode);
         const lastRendered = vNode._rendered;
         const rendered=renderComponent(vNode,component)
         const parentDom = lastRendered.dom && lastRendered.dom.parentNode;
@@ -52,15 +54,6 @@ export function updateComponent(component, isForce) {
     component.preState = state;
     component.preContext = context;
     component._dirty = false;
-    if (
-        hasLifeCycle('componentDidUpdate',component)
-    ) {
-        component.componentDidUpdate(preProps, preState, snapShot);
-    }
-    if (component._pendingCallbacks) {
-        while (component._pendingCallbacks.length) {
-            component._pendingCallbacks.pop().call(component);
-        }
-    }
+    
     return vNode.dom;
 }
