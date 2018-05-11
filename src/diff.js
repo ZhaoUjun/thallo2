@@ -8,6 +8,7 @@ import { unmount } from "./life-cycle/unmountComponent";
 
 export default function diff(preVNode, nextVNode, prarentDom, isSvg) {
     let dom = window.document.createTextNode("");
+    // prarentDom=prarentDom||preVNode.dom.parentNode;
     if (isSameNode(preVNode, nextVNode)) {
         if (nextVNode.tag & NODE_TAG.NORMAL_COMPONENT) {
             dom = reRenderComponent(preVNode, nextVNode);
@@ -63,7 +64,7 @@ function diffHostNode(preVNode, nextVNode, isSvg) {
     if (nextVNode.ref !== null) {
         Ref.update(preVNode, nextVNode, dom);
     }
-    return dom;
+    return nextVNode.dom=dom;
 }
 
 //snabbdom https://github.com/snabbdom/snabbdom

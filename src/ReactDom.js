@@ -1,5 +1,5 @@
 import { createDomNode } from "./createDomNode";
-import { isComposite ,isFunction,isValidContainer} from "./utils";
+import { isComposite ,isFunction,isValidContainer,isVnode,isComponent} from "./utils";
 import diff from './diff'
 import {readyWorks} from './top'
 
@@ -9,6 +9,7 @@ export function render(vnode, container, callback) {
     }
     let dom;
     if(container._reactRootContainer){
+        
         // console.log(container._reactRootContainer)
         dom=diff(container._reactRootContainer,vnode,container)
     }
@@ -20,10 +21,21 @@ export function render(vnode, container, callback) {
         callback.call(dom)
     }
     readyWorks.flushWorks()    
-    container._reactRootContainer = vnode;    
+    container._reactRootContainer = vnode;
     return isComposite(vnode) ? vnode.component : dom;
 }
 
-export function findDOMNode(component){
-    return component.vNode.dom
+export function findDOMNode(componentOrVnode){
+    if(isVnode(componentOrVnode)){
+        return componentOrVnode.dom
+    }
+    else if(isComponent(componentOrVnode)){
+        return componentOrVnode.vNode.dom
+    }
+    else if(isValidContainer(componentOrVnode)){
+        return componentOrVnode
+    }
+    else{
+        return null
+    }
 }

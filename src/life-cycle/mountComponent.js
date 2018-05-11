@@ -50,8 +50,15 @@ export function renderComponent(vNode,component){
     }
     let rendered;    
     CurrentOwner.current = component;
-    rendered = vNode._rendered = component.render();
-    CurrentOwner.current = null;
+    try{
+        rendered = vNode._rendered = component.render();
+    }
+    catch(err){
+        throw err
+    }
+    finally{
+        CurrentOwner.current = null;
+    }
     
     return rendered
 }
