@@ -81,7 +81,7 @@ describe("ReactJSXElement", () => {
         spyOn(console, "error");
         var a = 1;
         var element = <Component children="text">{a}</Component>;
-        expect(element.props.children[0].text).toBe(a);
+        expect(element.props.children.text).toBe(a);
         expect(console.error.calls.count()).toBe(0);
     });
 
@@ -89,20 +89,20 @@ describe("ReactJSXElement", () => {
         //@todo react children
         spyOn(console, "error");
         var element = <Component children="text" />;
-        expect(element.props.children[0].text).toBe("text");
+        expect(element.props.children.text).toBe("text");
         expect(console.error.calls.count()).toBe(0);
     });
 
     it("overrides children if null is provided as a JSX child", () => {
         spyOn(console, "error");
         var element = <Component children="text">{null}</Component>;
-        expect(element.props.children[0]).toBe(null);
+        expect(element.props.children).toBe(null);
         expect(console.error.calls.count()).toBe(0);
     });
 
     it("overrides children if undefined is provided as an argument", () => {
         var element = <Component children="text">{undefined}</Component>;
-        expect(element.props.children[0]).toBe(undefined);
+        expect(element.props.children).toBe(undefined);
 
         var element2 = React.cloneElement(
             <Component children="text" />,

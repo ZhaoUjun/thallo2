@@ -65,10 +65,17 @@ export function renderComponent(vNode,component){
 
 
 
-export function mountComponent(vNode, parentContext, parentComponent) {
+export function mountComponent(vNode, parentContext={}, parentComponent) {
+    let context={};
     const {  props, type, ref } = vNode;
-    const component =instanizeComponent(vNode,parentContext);
-    component.vNode = vNode;
+    if(type.contextTypes){
+        Object.keys(type.contextTypes).forEach(key=>{
+            context[key]=parentContext[key]
+        })
+    }
+    const component =instanizeComponent(vNode,context);
+    component.childContext=   getChildContext(component, parentContext);
+    component.vNode=vNode;
     if (isComponent(parentComponent)) {
         component._parentComponent = parentComponent;
     }
@@ -80,7 +87,7 @@ export function mountComponent(vNode, parentContext, parentComponent) {
     const rendered=renderComponent(vNode,component)
     const dom = (vNode.dom = createDomNode(
         rendered,
-        getChildContext(component, parentContext),
+        component.childContext,
         parentComponent,
         false
     ));
@@ -97,7 +104,7 @@ export function mountStateLessComponent(vNode, parentContext, parentComponent){
     const rendered=(vNode._rendered = type(props))
     const dom = (vNode.dom = createDomNode(
         rendered,
-        getChildContext(vNode, parentContext),
+        parentContext,
         parentComponent,
         false
     ));

@@ -5,6 +5,6 @@ export function getChildContext(component, parentContext = {}) {
         childContext=component.getChildContext()
     }
     return childContext
-        ? { ...childContext, ...parentContext }
+        ? {  ...parentContext,...childContext }
         : parentContext;
 }

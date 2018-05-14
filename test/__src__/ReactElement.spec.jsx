@@ -121,13 +121,13 @@ describe("ReactElement", () => {
             },
             a
         );
-        expect(element.props.children[0].text).toBe(1);
+        expect(element.props.children.text).toBe(1);
     });
     it("does not override children if no rest args are provided", () => {
         var element = React.createFactory(ComponentClass)({
             children: "text"
         });
-        expect(element.props.children[0].text).toEqual("text");
+        expect(element.props.children.text).toEqual("text");
         //offical expect(element.props.children).toEqual("text");
     });
     it("overrides children if null is provided as an argument", () => {
@@ -137,7 +137,7 @@ describe("ReactElement", () => {
             },
             null
         );
-        expect(element.props.children).toEqual([null]);
+        expect(element.props.children).toEqual(null);
         //offical expect(element.props.children).toEqual([null]);
     });
     it("merges rest arguments onto the children prop in an array", () => {

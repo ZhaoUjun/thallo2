@@ -71,7 +71,12 @@ function removeDom(vNode, parentDom) {
         Ref.detach(vNode, ref, dom);
     }
     if (dom && parentDom) {
-        parentDom.removeChild(dom);
+        try{
+            parentDom.removeChild(dom);
+        }
+        catch(err){
+            parentDom.innerHTML='';
+        }
     }
 }
 

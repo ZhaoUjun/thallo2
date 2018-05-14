@@ -9,7 +9,8 @@ import {
 } from "./life-cycle/unmountComponent";
 import { NODE_TAG,REACT_ELEMENT_TYPE } from "./constant";
 import { mountVNode } from "./createDomNode";
-import {readyWorks} from'./top'
+import {readyWorks,CurrentOwner} from'./top'
+
 function Base (props,type){
     this.type = type;
     this._owner = props.owner;

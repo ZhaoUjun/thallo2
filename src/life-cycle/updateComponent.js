@@ -5,7 +5,8 @@ import {
     isComponent,
     isFunction,
     isNotNullOrUndefined,
-    hasLifeCycle
+    hasLifeCycle,
+    isArray
 } from "../utils";
 import { CurrentOwner, mountedComponents,readyWorks } from "../top";
 import { createDomNode } from "../createDomNode";
@@ -13,12 +14,13 @@ import { getChildContext } from "../utils/getChildContext";
 import {renderComponent} from './mountComponent'
 import diff from "../diff";
 
-export function updateComponent(component, isForce,preVnode) {
+export function updateComponent(component, isForce) {
     component.state = component.getState();
     const { vNode, props, state, context } = component;
     const preProps = component.preProps || props;
     const preState = component.preState || state;
     const preContext = component.preContext || context;
+    component.childContext=getChildContext(component,component.childContext)
     let shouldSkip = false,
         snapShot;
     if (
@@ -46,7 +48,7 @@ export function updateComponent(component, isForce,preVnode) {
         const lastRendered = vNode._rendered;
         const rendered=renderComponent(vNode,component);
         const parentDom = lastRendered.dom && lastRendered.dom.parentNode;
-        vNode.dom = diff(lastRendered, rendered, parentDom);
+        vNode.dom = diff(lastRendered, rendered, parentDom,component.childContext);
     }
     component.preProps = props;
     component.preState = state;

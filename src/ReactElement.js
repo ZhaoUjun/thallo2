@@ -69,7 +69,7 @@ function mergeProps(type, props = {}, children) {
     const newProps =
         children.length > 0
             ? {
-                  children,
+                  children:children.length===1?children[0]:children,
                   owner: CurrentOwner.current
               }
             : { owner: CurrentOwner.current };

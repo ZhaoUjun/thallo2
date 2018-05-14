@@ -111,7 +111,7 @@ describe('ReactElementClone', () => {
     //@todo react chilrend
     class Component extends React.Component {
       render() {
-        expect(this.props.children[0].text).toBe('xyz');
+        expect(this.props.children.text).toBe('xyz');
         return <div />;
       }
     }
@@ -146,7 +146,7 @@ describe('ReactElementClone', () => {
       },
       undefined,
     );
-    expect(element.props.children[0]).toBe(undefined);
+    expect(element.props.children).toBe(undefined);
 
     var element2 = React.cloneElement(
       React.createElement(ComponentClass, {
