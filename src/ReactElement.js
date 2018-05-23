@@ -49,17 +49,16 @@ function transformChildren(children) {
         mergedChildren = [];
 
     while (i > 0) {
-        child = children.shift();
+        child = children[--i];
         if (isVnode(child)) {
-            mergedChildren.push(child);
+            mergedChildren.unshift(child);
         } else if (isArray(child)) {
-            mergedChildren.push(transformChildren(child));
+            mergedChildren.unshift(transformChildren(child));
         } else if (isString(child) || isNumber(child)) {
-            mergedChildren.push(new TextNode(child));
+            mergedChildren.unshift(new TextNode(child));
         } else if (child === null || child === undefined) {
-            mergedChildren.push(child);
+            mergedChildren.unshift(child);
         }
-        i--;
     }
     return mergedChildren;
 }
@@ -88,13 +87,15 @@ function mergeProps(type, props = {}, children) {
         }
         newProps[propsName] = props[propsName];
     });
-
     return newProps;
 }
 
 export function createElement(type, props, ...args) {
     if(type==='comment'){
         console.log(type)
+    }
+    if(type===null){
+        return new TextNode(type);
     }
     props = props || {};
     return instantiateVNode({ type, props: mergeProps(type, props, args) });

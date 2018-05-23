@@ -13,7 +13,22 @@ function attchContext(nextVnode,parentContext){
     if(nextVnode.type.contextTypes){
         Object.keys(nextVnode.type.contextTypes).forEach(key=>{
             context[key]=parentContext[key]
-        })
+        });
+    }
+    else{
+        context=nextVnode.component.context
+    }
+    return context
+}
+function getNextContext(nextVnode,parentContext){
+    let context={};
+    if(nextVnode.type.contextTypes){
+        Object.keys(nextVnode.type.contextTypes).forEach(key=>{
+            context[key]=parentContext[key]
+        });
+    }
+    else{
+        context=nextVnode.component.context
     }
     return context
 }
@@ -21,18 +36,22 @@ export function reRenderComponent(preVnode, nextVnode,parentContext) {
     const preProps = preVnode.props;
     const nextProps = nextVnode.props;
     const component = (nextVnode.component = preVnode.component);
+    component.nextContext=getNextContext(nextVnode,parentContext);
+    component.childContext=getChildContext(component,parentContext)
+    
     component._disable = true; //avoid updating again when call setState in this hook
     if (hasLifeCycle("componentWillReceiveProps", component)) {
-        component.componentWillReceiveProps(nextProps,attchContext(nextVnode,parentContext));
+        component.componentWillReceiveProps(nextProps,component.nextContext);
     }
     component._disable = false;
-    component.preProps = preProps;
-    component.preState = component.state;
-    component.preContext = component.context;
-    component.props=nextProps;
+    // component.preProps = preProps;
+    // component.preState = component.state;
+    // component.preContext = component.context;
+    component.nextProps=nextProps;
     component.vNode=nextVnode;
     nextVnode._rendered=preVnode._rendered;
-    updateContext(component,nextVnode,parentContext)
+    nextVnode.dom=preVnode.dom;
+    // updateContext(component,nextVnode,parentContext)
     readyWorks.add(preVnode,nextVnode);    
     return updateComponent(component,false);
 }

@@ -5,11 +5,10 @@ import Ref from "./Ref";
 
 export function createDomNode(
     vNode,
-    parentContext,
+    parentContext={},
     parentComponent,
     isSvg = false
 ) {
-   
     const  tag  = vNode&&vNode.tag;
     let domNode;
     if (
@@ -49,4 +48,10 @@ export function mountVNode(vNode, parentContext, parentComponent, isSvg) {
         Ref.attach(vNode, ref, dom);
     }
     return dom;
+}
+
+export function mountTextNode(vNode, parentContext, parentComponent, isSvg){
+    const textNode = (vNode.dom = window.document.createTextNode(this.text));
+
+    return textNode;
 }

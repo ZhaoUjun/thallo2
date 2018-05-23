@@ -8,6 +8,7 @@ import { unmount } from "./life-cycle/unmountComponent";
 
 export default function diff(preVNode, nextVNode, prarentDom,parentContext,isSvg) {
     let dom = window.document.createTextNode("");
+    
     // prarentDom=prarentDom||preVNode.dom.parentNode;
     if (isSameNode(preVNode, nextVNode)) {
         if (nextVNode.tag & NODE_TAG.NORMAL_COMPONENT) {
@@ -22,9 +23,11 @@ export default function diff(preVNode, nextVNode, prarentDom,parentContext,isSvg
             prarentDom.appendChild(dom);
         }
     } else {
-        preVNode.unmount(prarentDom);
         dom = createDomNode(nextVNode,parentContext);
-        prarentDom.appendChild(dom);
+        prarentDom.appendChild(dom);        
+        preVNode.unmount(prarentDom);  
+         
+        
     }
     return dom;
 }
@@ -106,11 +109,7 @@ function diffChildren(parentElm, oldCh, newCh,parentContext,isSvg) {
         } else if (isSameNode(oldStartVnode, newEndVnode)) {
             // Vnode moved right
             diff(oldStartVnode, newEndVnode, parentElm,parentContext);
-            api.insertBefore(
-                parentElm,
-                oldStartVnode.elm,
-                api.nextSibling(oldEndVnode.elm)
-            );
+            parentElm.insertBefore(oldStartVnode.dom, oldEndVnode.dom.nextSibling);
             oldStartVnode = oldCh[++oldStartIdx];
             newEndVnode = newCh[--newEndIdx];
         } else if (isSameNode(oldEndVnode, newStartVnode)) {

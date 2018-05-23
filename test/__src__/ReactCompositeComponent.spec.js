@@ -1,19 +1,15 @@
 import React from "../../src/React";
 import PropTypes from '../../node_modules/prop-types'
-import {renderIntoDocument,Simulate} from '../utils'
+import {renderIntoDocument,Simulate,shallowCompare} from '../utils'
 import {HTMLNodeType} from '../../src/constant'
 import { CurrentOwner } from "../../src/top";
 let MorphingComponent,ChildUpdates;
+
 describe('ReactCompositeComponent', () => {
   beforeEach(() => {
   
     jasmine.clock().install();
-    // shallowCompare = function(instance, nextProps, nextState) {
-    //   return (
-    //     !shallowEqual(instance.props, nextProps) ||
-    //     !shallowEqual(instance.state, nextState)
-    //   );
-    // };
+  
 
     MorphingComponent = class extends React.Component {
       state = {activated: false};
@@ -892,7 +888,6 @@ describe('ReactCompositeComponent', () => {
     class ChildWithoutContext extends React.Component {
       componentWillReceiveProps(nextProps, nextContext) {
         expect('foo' in nextContext).toBe(false);
-
         if (nextProps !== this.props) {
           propChanges++;
         }
@@ -979,33 +974,33 @@ describe('ReactCompositeComponent', () => {
   //   );
   // });
 
-  // it('only renders once if updated in componentWillReceiveProps', () => {
-  //   var renders = 0;
+  it('only renders once if updated in componentWillReceiveProps', () => {
+    var renders = 0;
 
-  //   class Component extends React.Component {
-  //     state = {updated: false};
+    class Component extends React.Component {
+      state = {updated: false};
 
-  //     componentWillReceiveProps(props) {
-  //       expect(props.update).toBe(1);
-  //       expect(renders).toBe(1);
-  //       this.setState({updated: true});
-  //       expect(renders).toBe(1);
-  //     }
+      componentWillReceiveProps(props) {
+        expect(props.update).toBe(1);
+        expect(renders).toBe(1);
+        this.setState({updated: true});
+        expect(renders).toBe(1);
+      }
 
-  //     render() {
-  //       renders++;
-  //       return <div />;
-  //     }
-  //   }
+      render() {
+        renders++;
+        return <div />;
+      }
+    }
 
-  //   var container = document.createElement('div');
-  //   var instance = React.render(<Component update={0} />, container);
-  //   expect(renders).toBe(1);
-  //   expect(instance.state.updated).toBe(false);
-  //   React.render(<Component update={1} />, container);
-  //   expect(renders).toBe(2);
-  //   expect(instance.state.updated).toBe(true);
-  // });
+    var container = document.createElement('div');
+    var instance = React.render(<Component update={0} />, container);
+    expect(renders).toBe(1);
+    expect(instance.state.updated).toBe(false);
+    React.render(<Component update={1} />, container);
+    expect(renders).toBe(2);
+    expect(instance.state.updated).toBe(true);
+  });
 
   // it('only renders once if updated in componentWillReceiveProps when batching', () => {
   //   var renders = 0;
@@ -1037,108 +1032,110 @@ describe('ReactCompositeComponent', () => {
   //   expect(instance.state.updated).toBe(true);
   // });
 
-  // it('should update refs if shouldComponentUpdate gives false', () => {
-  //   class Static extends React.Component {
-  //     shouldComponentUpdate() {
-  //       return false;
-  //     }
+  it('should update refs if shouldComponentUpdate gives false', () => {
+    class Static extends React.Component {
+      shouldComponentUpdate() {
+        return false;
+      }
 
-  //     render() {
-  //       return <div>{this.props.children}</div>;
-  //     }
-  //   }
+      render() {
+        return <div>{this.props.children}</div>;
+      }
+    }
 
-  //   class Component extends React.Component {
-  //     render() {
-  //       if (this.props.flipped) {
-  //         return (
-  //           <div>
-  //             <Static ref="static0" key="B">B (ignored)</Static>
-  //             <Static ref="static1" key="A">A (ignored)</Static>
-  //           </div>
-  //         );
-  //       } else {
-  //         return (
-  //           <div>
-  //             <Static ref="static0" key="A">A</Static>
-  //             <Static ref="static1" key="B">B</Static>
-  //           </div>
-  //         );
-  //       }
-  //     }
-  //   }
+    class Component extends React.Component {
+      render() {
+        if (this.props.flipped) {
+          return (
+            <div>
+              <Static ref="static0" key="B">B (ignored)</Static>
+              <Static ref="static1" key="A">A (ignored)</Static>
+            </div>
+          );
+        } else {
+          return (
+            <div>
+              <Static ref="static0" key="A">A</Static>
+              <Static ref="static1" key="B">B</Static>
+            </div>
+          );
+        }
+      }
+    }
 
-  //   var container = document.createElement('div');
-  //   var comp = React.render(<Component flipped={false} />, container);
-  //   expect(React.findDOMNode(comp.refs.static0).textContent).toBe('A');
-  //   expect(React.findDOMNode(comp.refs.static1).textContent).toBe('B');
+    var container = document.createElement('div');
+    var comp = React.render(<Component flipped={false} />, container);
+    expect(React.findDOMNode(comp.refs.static0).textContent).toBe('A');
+    expect(React.findDOMNode(comp.refs.static1).textContent).toBe('B');
 
-  //   // When flipping the order, the refs should update even though the actual
-  //   // contents do not
-  //   React.render(<Component flipped={true} />, container);
-  //   expect(React.findDOMNode(comp.refs.static0).textContent).toBe('B');
-  //   expect(React.findDOMNode(comp.refs.static1).textContent).toBe('A');
-  // });
+    // When flipping the order, the refs should update even though the actual
+    // contents do not
+    React.render(<Component flipped={true} />, container);
+    
+    expect(React.findDOMNode(comp.refs.static0).textContent).toBe('B');
+    expect(React.findDOMNode(comp.refs.static1).textContent).toBe('A');
+  });
 
-  // it('should allow access to findDOMNode in componentWillUnmount', () => {
-  //   var a = null;
-  //   var b = null;
+  it('should allow access to findDOMNode in componentWillUnmount', () => {
+    var a = null;
+    var b = null;
 
-  //   class Component extends React.Component {
-  //     componentDidMount() {
-  //       a = React.findDOMNode(this);
-  //       expect(a).not.toBe(null);
-  //     }
+    class Component extends React.Component {
+      componentDidMount() {
+        a = React.findDOMNode(this);
+        expect(a).not.toBe(null);
+      }
 
-  //     componentWillUnmount() {
-  //       b = React.findDOMNode(this);
-  //       expect(b).not.toBe(null);
-  //     }
+      componentWillUnmount() {
+        b = React.findDOMNode(this);
+        expect(b).not.toBe(null);
+      }
 
-  //     render() {
-  //       return <div />;
-  //     }
-  //   }
+      render() {
+        return <div />;
+      }
+    }
 
-  //   var container = document.createElement('div');
-  //   expect(a).toBe(container.firstChild);
-  //   React.render(<Component />, container);
-  //   React.unmountComponentAtNode(container);
-  //   expect(a).toBe(b);
-  // });
+    var container = document.createElement('div');
+    expect(a).toBe(container.firstChild);
+    React.render(<Component />, container);
+    React.unmountComponentAtNode(container);
+    expect(a).toBe(b);
+  });
 
-  // it('context should be passed down from the parent', () => {
-  //   class Parent extends React.Component {
-  //     static childContextTypes = {
-  //       foo: PropTypes.string,
-  //     };
+  it('context should be passed down from the parent', () => {
+    class Parent extends React.Component {
+      static childContextTypes = {
+        foo: PropTypes.string,
+      };
 
-  //     getChildContext() {
-  //       return {
-  //         foo: 'bar',
-  //       };
-  //     }
+      getChildContext() {
+        return {
+          foo: 'bar',
+        };
+      }
 
-  //     render() {
-  //       return <div>{this.props.children}</div>;
-  //     }
-  //   }
+      render() {
+        return <div>{this.props.children}</div>;
+      }
+    }
 
-  //   class Component extends React.Component {
-  //     static contextTypes = {
-  //       foo: PropTypes.string.isRequired,
-  //     };
+    class Component extends React.Component {
+      static contextTypes = {
+        foo: PropTypes.string.isRequired,
+      };
 
-  //     render() {
-  //       return <div />;
-  //     }
-  //   }
+      render() {
+        return <div />;
+      }
+    }
 
-  //   var div = document.createElement('div');
-  //   React.render(<Parent><Component /></Parent>, div);
-  // });
+    var div = document.createElement('div');
+    React.render(<Parent><Component /></Parent>, div);
+  });
 
   // it('should replace state', () => {
+    //@not support updater
   //   class Moo extends React.Component {
   //     state = {x: 1};
   //     render() {
@@ -1155,6 +1152,7 @@ describe('ReactCompositeComponent', () => {
   // });
 
   // it('should support objects with prototypes as state', () => {
+      //@not support updater
   //   var NotActuallyImmutable = function(str) {
   //     this.str = str;
   //   };
@@ -1204,33 +1202,33 @@ describe('ReactCompositeComponent', () => {
   //   expect(moo.state.amIImmutable).toBe(undefined);
   // });
 
-  // it('should not warn about unmounting during unmounting', () => {
-  //   var container = document.createElement('div');
-  //   var layer = document.createElement('div');
+  it('should not warn about unmounting during unmounting', () => {
+    var container = document.createElement('div');
+    var layer = document.createElement('div');
 
-  //   class Component extends React.Component {
-  //     componentDidMount() {
-  //       React.render(<div />, layer);
-  //     }
+    class Component extends React.Component {
+      componentDidMount() {
+        React.render(<div />, layer);
+      }
 
-  //     componentWillUnmount() {
-  //       React.unmountComponentAtNode(layer);
-  //     }
+      componentWillUnmount() {
+        React.unmountComponentAtNode(layer);
+      }
 
-  //     render() {
-  //       return <div />;
-  //     }
-  //   }
+      render() {
+        return <div />;
+      }
+    }
 
-  //   class Outer extends React.Component {
-  //     render() {
-  //       return <div>{this.props.children}</div>;
-  //     }
-  //   }
+    class Outer extends React.Component {
+      render() {
+        return <div>{this.props.children}</div>;
+      }
+    }
 
-  //   React.render(<Outer><Component /></Outer>, container);
-  //   React.render(<Outer />, container);
-  // });
+    React.render(<Outer><Component /></Outer>, container);
+    React.render(<Outer />, container);
+  });
 
   // it('should warn when mutated props are passed', () => {
   //   spyOn(console, 'error');
@@ -1259,215 +1257,233 @@ describe('ReactCompositeComponent', () => {
   //   );
   // });
 
-  // it('should only call componentWillUnmount once', () => {
-  //   var app;
-  //   var count = 0;
+  it('should only call componentWillUnmount once', () => {
+    var app;
+    var count = 0;
 
-  //   class App extends React.Component {
-  //     render() {
-  //       if (this.props.stage === 1) {
-  //         return <UnunmountableComponent />;
-  //       } else {
-  //         return null;
-  //       }
-  //     }
-  //   }
+    class App extends React.Component {
+      render() {
+        if (this.props.stage === 1) {
+          return <UnunmountableComponent />;
+        } else {
+          return null;
+        }
+      }
+    }
 
-  //   class UnunmountableComponent extends React.Component {
-  //     componentWillUnmount() {
-  //       app.setState({});
-  //       count++;
-  //       throw Error('always fails');
-  //     }
+    class UnunmountableComponent extends React.Component {
+      componentWillUnmount() {
+        // app.setState({});
+        count++;
+        throw Error('always fails');
+      }
 
-  //     render() {
-  //       return <div>Hello {this.props.name}</div>;
-  //     }
-  //   }
+      render() {
+        return <div>Hello {this.props.name}</div>;
+      }
+    }
 
-  //   var container = document.createElement('div');
+    var container = document.createElement('div');
 
-  //   var setRef = ref => {
-  //     if (ref) {
-  //       app = ref;
-  //     }
-  //   };
+    var setRef = ref => {
+      if (ref) {
+        app = ref;
+      }
+    };
 
-  //   expect(function() {
-  //     React.render(<App ref={setRef} stage={1} />, container);
-  //     React.render(<App ref={setRef} stage={2} />, container);
-  //   }).toThrow();
-  //   expect(count).toBe(1);
-  // });
+    expect(function() {
+      React.render(<App ref={setRef} stage={1} />, container);
+      React.render(<App ref={setRef} stage={2} />, container);
+    }).toThrow();
+    expect(count).toBe(1);
+  });
 
-  // it('prepares new child before unmounting old', () => {
-  //   var log = [];
+  it('prepares new child before unmounting old', () => {
+    var log = [];
 
-  //   class Spy extends React.Component {
-  //     componentWillMount() {
-  //       log.push(this.props.name + ' componentWillMount');
-  //     }
-  //     render() {
-  //       log.push(this.props.name + ' render');
-  //       return <div />;
-  //     }
-  //     componentDidMount() {
-  //       log.push(this.props.name + ' componentDidMount');
-  //     }
-  //     componentWillUnmount() {
-  //       log.push(this.props.name + ' componentWillUnmount');
-  //     }
-  //   }
+    class Spy extends React.Component {
+      componentWillMount() {
+        log.push(this.props.name + ' componentWillMount');
+      }
+      render() {
+        log.push(this.props.name + ' render');
+        return <div />;
+      }
+      componentDidMount() {
+        log.push(this.props.name + ' componentDidMount');
+      }
+      componentWillUnmount() {
+        log.push(this.props.name + ' componentWillUnmount');
+      }
+    }
 
-  //   class Wrapper extends React.Component {
-  //     render() {
-  //       return <Spy key={this.props.name} name={this.props.name} />;
-  //     }
-  //   }
+    class Wrapper extends React.Component {
+      render() {
+        return <Spy key={this.props.name} name={this.props.name} />;
+      }
+    }
 
-  //   var container = document.createElement('div');
-  //   React.render(<Wrapper name="A" />, container);
-  //   React.render(<Wrapper name="B" />, container);
+    var container = document.createElement('div');
+    React.render(<Wrapper name="A" />, container);
+    React.render(<Wrapper name="B" />, container);
+    expect(log).toEqual([
+      'A componentWillMount',
+      'A render',
+      'A componentDidMount',
 
-  //   expect(log).toEqual([
-  //     'A componentWillMount',
-  //     'A render',
-  //     'A componentDidMount',
+      'B componentWillMount',
+      'B render',
+      'A componentWillUnmount',
+      'B componentDidMount',
+    ]);
+  });
 
-  //     'B componentWillMount',
-  //     'B render',
-  //     'A componentWillUnmount',
-  //     'B componentDidMount',
-  //   ]);
-  // });
+  it('respects a shallow shouldComponentUpdate implementation', () => {
+    var renderCalls = 0;
+    
+    class PlasticWrap extends React.Component {
+      constructor(props, context) {
+        super(props, context);
+        this.state = {
+          color: 'green',
+        };
+      }
 
-  // it('respects a shallow shouldComponentUpdate implementation', () => {
-  //   var renderCalls = 0;
-  //   class PlasticWrap extends React.Component {
-  //     constructor(props, context) {
-  //       super(props, context);
-  //       this.state = {
-  //         color: 'green',
-  //       };
-  //     }
+      render() {
+        return <Apple color={this.state.color} ref="apple" />;
+      }
+    }
 
-  //     render() {
-  //       return <Apple color={this.state.color} ref="apple" />;
-  //     }
-  //   }
+    class Apple extends React.Component {
+      state = {
+        cut: false,
+        slices: 1,
+      };
 
-  //   class Apple extends React.Component {
-  //     state = {
-  //       cut: false,
-  //       slices: 1,
-  //     };
+      shouldComponentUpdate(nextProps, nextState) {
+        return shallowCompare(this, nextProps, nextState);
+      }
 
-  //     shouldComponentUpdate(nextProps, nextState) {
-  //       return shallowCompare(this, nextProps, nextState);
-  //     }
+      cut() {
+        this.setState({
+          cut: true,
+          slices: 10,
+        });
+      }
 
-  //     cut() {
-  //       this.setState({
-  //         cut: true,
-  //         slices: 10,
-  //       });
-  //     }
+      eatSlice() {
+        this.setState({
+          slices: this.state.slices - 1,
+        });
+      }
 
-  //     eatSlice() {
-  //       this.setState({
-  //         slices: this.state.slices - 1,
-  //       });
-  //     }
+      render() {
+        renderCalls++;
+        return <div />;
+      }
+    }
 
-  //     render() {
-  //       renderCalls++;
-  //       return <div />;
-  //     }
-  //   }
+    var container = document.createElement('div');
+    var instance = React.render(<PlasticWrap />, container);
+    expect(renderCalls).toBe(1);
 
-  //   var container = document.createElement('div');
-  //   var instance = React.render(<PlasticWrap />, container);
-  //   expect(renderCalls).toBe(1);
+    // Do not re-render based on props
+    instance.setState({color: 'green'});
+    jasmine.clock().tick(10)
+    expect(renderCalls).toBe(1);
 
-  //   // Do not re-render based on props
-  //   instance.setState({color: 'green'});
-  //   expect(renderCalls).toBe(1);
+    // Re-render based on props
+    instance.setState({color: 'red'});
+    jasmine.clock().tick(10)
+    
+    expect(renderCalls).toBe(2);
 
-  //   // Re-render based on props
-  //   instance.setState({color: 'red'});
-  //   expect(renderCalls).toBe(2);
+    // // Re-render base on state
+    instance.refs.apple.cut();
+    jasmine.clock().tick(10)
+    
+    expect(renderCalls).toBe(3);
 
-  //   // Re-render base on state
-  //   instance.refs.apple.cut();
-  //   expect(renderCalls).toBe(3);
+    // No re-render based on state
+    instance.refs.apple.cut();
+    jasmine.clock().tick(10)
+    
+    expect(renderCalls).toBe(3);
 
-  //   // No re-render based on state
-  //   instance.refs.apple.cut();
-  //   expect(renderCalls).toBe(3);
+    // Re-render based on state again
+    instance.refs.apple.eatSlice();
+    jasmine.clock().tick(10)
+    
+    expect(renderCalls).toBe(4);
+  });
 
-  //   // Re-render based on state again
-  //   instance.refs.apple.eatSlice();
-  //   expect(renderCalls).toBe(4);
-  // });
+  it('does not do a deep comparison for a shallow shouldComponentUpdate implementation', () => {
+    function getInitialState() {
+      return {
+        foo: [1, 2, 3],
+        bar: {a: 4, b: 5, c: 6},
+      };
+    }
 
-  // it('does not do a deep comparison for a shallow shouldComponentUpdate implementation', () => {
-  //   function getInitialState() {
-  //     return {
-  //       foo: [1, 2, 3],
-  //       bar: {a: 4, b: 5, c: 6},
-  //     };
-  //   }
+    var renderCalls = 0;
+    var initialSettings = getInitialState();
 
-  //   var renderCalls = 0;
-  //   var initialSettings = getInitialState();
+    class Component extends React.Component {
+      state = initialSettings;
 
-  //   class Component extends React.Component {
-  //     state = initialSettings;
+      shouldComponentUpdate(nextProps, nextState) {
+        return shallowCompare(this, nextProps, nextState);
+      }
 
-  //     shouldComponentUpdate(nextProps, nextState) {
-  //       return shallowCompare(this, nextProps, nextState);
-  //     }
+      render() {
+        renderCalls++;
+        return <div />;
+      }
+    }
 
-  //     render() {
-  //       renderCalls++;
-  //       return <div />;
-  //     }
-  //   }
+    var container = document.createElement('div');
+    var instance = React.render(<Component />, container);
+    expect(renderCalls).toBe(1);
 
-  //   var container = document.createElement('div');
-  //   var instance = React.render(<Component />, container);
-  //   expect(renderCalls).toBe(1);
+    // Do not re-render if state is equal
+    var settings = {
+      foo: initialSettings.foo,
+      bar: initialSettings.bar,
+    };
+    instance.setState(settings);
+    jasmine.clock().tick(10)
+    
+    expect(renderCalls).toBe(1);
 
-  //   // Do not re-render if state is equal
-  //   var settings = {
-  //     foo: initialSettings.foo,
-  //     bar: initialSettings.bar,
-  //   };
-  //   instance.setState(settings);
-  //   expect(renderCalls).toBe(1);
+    // Re-render because one field changed,don't accepted
+    // it is the same ref ,Do not re-render if state is equal
+    initialSettings.foo = [1, 2, 3];
+    instance.setState(initialSettings);
+    jasmine.clock().tick(10)
+    
+    expect(renderCalls).toBe(1);
 
-  //   // Re-render because one field changed
-  //   initialSettings.foo = [1, 2, 3];
-  //   instance.setState(initialSettings);
-  //   expect(renderCalls).toBe(2);
+    // Re-render because the object changed
+    instance.setState(getInitialState());
+    jasmine.clock().tick(10)
+    
+    expect(renderCalls).toBe(2);
+  });
 
-  //   // Re-render because the object changed
-  //   instance.setState(getInitialState());
-  //   expect(renderCalls).toBe(3);
-  // });
+  it('should call setState callback with no arguments', () => {
+    let mockArgs;
+    class Component extends React.Component {
+      componentDidMount() {
+        this.setState({}, (...args) => (mockArgs = args));
+      }
+      render() {
+        return false;
+      }
+    }
 
-  // it('should call setState callback with no arguments', () => {
-  //   let mockArgs;
-  //   class Component extends React.Component {
-  //     componentDidMount() {
-  //       this.setState({}, (...args) => (mockArgs = args));
-  //     }
-  //     render() {
-  //       return false;
-  //     }
-  //   }
-
-  //  renderIntoDocument(<Component />);
-  //   expect(mockArgs.length).toEqual(0);
-  // });
+   renderIntoDocument(<Component />);
+   jasmine.clock().tick(10)
+   
+    expect(mockArgs.length).toEqual(0);
+  });
 });

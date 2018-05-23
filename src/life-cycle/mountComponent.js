@@ -13,6 +13,8 @@ import {
 import { CurrentOwner } from "../top";
 import { createDomNode } from "../createDomNode";
 import { getChildContext } from "../utils/getChildContext";
+import {createElement} from '../ReactElement'
+import { TextNode } from "../vNodes";
 
 function instanizeComponent(vNode,parentContext){
     const { type,props } = vNode;
@@ -24,6 +26,17 @@ function instanizeComponent(vNode,parentContext){
         throw 'Foo.state: must be set to an object or null'
     }
     return component
+}
+
+function getRendered(component){
+    let rendered=component.render();
+    if(isNumber(rendered)||isString(rendered)){
+        rendered=new TextNode(rendered);
+    }
+    else if(!isNotNullOrUndefined(rendered)){
+        rendered =new TextNode('');
+    }
+    return rendered
 }
 
 export function renderComponent(vNode,component){
@@ -51,7 +64,8 @@ export function renderComponent(vNode,component){
     let rendered;    
     CurrentOwner.current = component;
     try{
-        rendered = vNode._rendered = component.render();
+        //@todo dispose null 
+        rendered = vNode._rendered = getRendered(component);
     }
     catch(err){
         throw err
@@ -66,6 +80,7 @@ export function renderComponent(vNode,component){
 
 
 export function mountComponent(vNode, parentContext={}, parentComponent) {
+   
     let context={};
     const {  props, type, ref } = vNode;
     if(type.contextTypes){
@@ -74,7 +89,7 @@ export function mountComponent(vNode, parentContext={}, parentComponent) {
         })
     }
     const component =instanizeComponent(vNode,context);
-    component.childContext=   getChildContext(component, parentContext);
+    component.childContext=getChildContext(component, parentContext);
     component.vNode=vNode;
     if (isComponent(parentComponent)) {
         component._parentComponent = parentComponent;
@@ -84,7 +99,8 @@ export function mountComponent(vNode, parentContext={}, parentComponent) {
         component.state = component.getState();
     }
     
-    const rendered=renderComponent(vNode,component)
+    const rendered=renderComponent(vNode,component);
+   
     const dom = (vNode.dom = createDomNode(
         rendered,
         component.childContext,

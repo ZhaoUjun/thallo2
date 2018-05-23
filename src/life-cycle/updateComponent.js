@@ -11,31 +11,29 @@ import {
 import { CurrentOwner, mountedComponents,readyWorks } from "../top";
 import { createDomNode } from "../createDomNode";
 import { getChildContext } from "../utils/getChildContext";
-import {renderComponent} from './mountComponent'
+import {renderComponent} from './mountComponent';
 import diff from "../diff";
+import {createElement} from '../ReactElement'
 
 export function updateComponent(component, isForce) {
-    component.state = component.getState();
-    const { vNode, props, state, context } = component;
-    const preProps = component.preProps || props;
-    const preState = component.preState || state;
-    const preContext = component.preContext || context;
-    component.childContext=getChildContext(component,component.childContext)
+    component.nextState = component.getState();
+    const { vNode, props, state, context,nextState,nextContext } = component;
+    const nextProps=(component.nextProps=component.nextProps||props)
     let shouldSkip = false,
         snapShot;
     if (
         hasLifeCycle('shouldComponentUpdate',component)
     ) {
         shouldSkip =
-            isForce||!component.shouldComponentUpdate(props, state, context) ;
+            isForce||!component.shouldComponentUpdate(nextProps, nextState, nextContext) ;
     }
     if (
         hasLifeCycle('getSnapshotBeforeUpdate',component)
     ) {
         snapShot = component.getSnapshotBeforeUpdate(
-            preProps,
-            preState,
-            preContext
+            props,
+            state,
+            context
         );
         component.snapShot=snapShot;
     }
@@ -43,16 +41,18 @@ export function updateComponent(component, isForce) {
         if (
             hasLifeCycle('componentWillUpdate',component)
         ) {
-            component.componentWillUpdate(props, state);
+            component.componentWillUpdate(nextProps, nextState);
         }
+        component.props = nextProps;
+        component.state = nextState;
+        component.context = nextContext;
+        component.childContext=getChildContext(component,component.childContext)
         const lastRendered = vNode._rendered;
         const rendered=renderComponent(vNode,component);
         const parentDom = lastRendered.dom && lastRendered.dom.parentNode;
         vNode.dom = diff(lastRendered, rendered, parentDom,component.childContext);
+        
     }
-    component.preProps = props;
-    component.preState = state;
-    component.preContext = context;
     component._dirty = false;
     
     return vNode.dom;

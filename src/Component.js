@@ -29,6 +29,7 @@ export class Component {
         }
         //@todo setStateSync
         if(!this._disable){
+            
             //ensure can not rerender during some life-cycle
             enqueueRender(this);
         }

@@ -28,9 +28,9 @@ function flushRef(prevouis, current) {
 
 function flushPenddingCallback(current) {
     const { component } = current;
-    if (component._pendingCallbacks) {
-        while (component._pendingCallbacks.length) {
-            component._pendingCallbacks.pop().call(component);
+    if (component._callbackQueue) {
+        while (component._callbackQueue.length) {
+            component._callbackQueue.pop().call(component);
         }
     }
 }

@@ -77,7 +77,15 @@ export function isVnode(vNode){
      return isNotNullOrUndefined(vNode)&&vNode.$$typeof===REACT_ELEMENT_TYPE
 }
 export function isSameNode(a,b){
-    return a.type===b.type&&a.key===b.key
+    if(a&&b){
+        return a.type===b.type&&a.key===b.key
+    }
+    else if(!a&&!b){
+        return a===b
+    }
+    else{
+        return false
+    }
 }
 
 export function defer(fun, ...args) {

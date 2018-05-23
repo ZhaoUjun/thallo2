@@ -33,11 +33,17 @@ export function unmount(vNode,parentDom){
 
 export function unmountComponent(vNode, parentDom) {
     const { component, _rendered, dom } = vNode;
+    component._disable=true;
     if (
         hasLifeCycle('componentWillUnmount',component)
     ) {
-        component.componentWillUnmount();
-    }
+        try{
+            component.componentWillUnmount();
+        }
+        catch(err){
+            throw err
+        }
+    };
     _rendered.unmount();
     removeDom(vNode, parentDom);
 }
