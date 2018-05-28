@@ -77,7 +77,7 @@ function mergeProps(type, props = {}, children) {
     }
     Object.keys(props).forEach(propsName => {
         if (propsName === "defaultValue") {
-            newProps[value] = props.value || props.defaultVale;
+            newProps.value = props.value || props.defaultValue;
         }
         if (propsName === "children") {
             return;

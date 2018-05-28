@@ -150,17 +150,17 @@ function diffChildren(parentElm, oldCh, newCh,parentContext,isSvg) {
         if (oldStartIdx > oldEndIdx) {
             before =
                 newCh[newEndIdx + 1] == null ? null : newCh[newEndIdx + 1].dom;
-            addVnodes(parentElm, before, newCh, newStartIdx, newEndIdx);
+            addVnodes(parentElm, before, newCh, newStartIdx, newEndIdx,parentContext);
         } else {
             removeVnodes(parentElm, oldCh, oldStartIdx, oldEndIdx);
         }
     }
 }
-function addVnodes(parentElm, before, vnodes, startIdx, endIdx) {
+function addVnodes(parentElm, before, vnodes, startIdx, endIdx,parentContext) {
     for (; startIdx <= endIdx; ++startIdx) {
         const ch = vnodes[startIdx];
         if (ch != null) {
-            parentElm.insertBefore(createElm(ch, insertedVnodeQueue), before);
+            parentElm.insertBefore(createDomNode(ch, parentContext), before);
         }
     }
 }

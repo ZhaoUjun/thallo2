@@ -1,4 +1,6 @@
 import { isEventName, addEventHandler,removeEventHandler } from "./event";
+import {isNotNullOrUndefined} from './utils'
+import {textareaSpec} from './specific'
 
 const styleOps = {
     attach: (node, styles) => {
@@ -36,11 +38,14 @@ export function attachAttributes(node, props) {
         if (propName === "children") {
             return;
         } else if (propName === "className") {
-            return node.setAttribute("class", props[propName]);
+            return classOps.attach(node,props[propName])
         } else if (propName === "style") {
             return styleOps.attach(node, props[propName]);
         } else if (isEventName(propName)) {
             return addEventHandler(node, propName, props[propName]);
+        }
+        else if(node.tagName==='TEXTAREA'&&node[propName]==='value'||'defaultValue'){
+            return textareaSpec.attachAttr(node,propName,props[propName])
         }
         node.setAttribute(propName, props[propName]);
     });
@@ -56,10 +61,18 @@ export function updateAttr(node, name, value, preValue) {
     } else if (name === "style") {
         return styleOps.update(node, value, preValue);
     } else if (name === "className") {
-        return node.setAttribute("class", value);
+        return classOps.attach(node,value)
     } else if (isEventName) {
         removeEventHandler(node,name)
         return addEventHandler(node, name, value);
+    }else if(node.tagName==='TEXTAREA'&&node[propName]==='value'||'defaultValue'){
+        return textareaSpec.attachAttr(node,name,props.value)
     }
     node.setAttribute(name, value);
+}
+
+const classOps={
+    attach:function(node,value){
+        return node.setAttribute("class", isNotNullOrUndefined(value)?value:'')
+    }
 }
