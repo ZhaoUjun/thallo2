@@ -1,7 +1,14 @@
 import { isEventName, addEventHandler,removeEventHandler } from "./event";
-import {isNotNullOrUndefined} from './utils'
+import {isNotNullOrUndefined,isFunction} from './utils'
 import {textareaSpec} from './specific'
 
+function customizePropName (propName){
+    const interalAtrr=['tabindex','spellcheck','dropzone','contextmenu','contenteditable','accesskey']
+    if(interalAtrr.includes(propName.toLocaleLowerCase()) ){
+        return propName
+    }
+    return propName.replace(/[A-Z]/g,(val)=>('-'+val.toLocaleLowerCase()))
+}
 const styleOps = {
     attach: (node, styles) => {
         const { style } = node;
@@ -34,20 +41,27 @@ function parseStyle(styleObj) {
 }
 
 export function attachAttributes(node, props) {
+    
     Object.keys(props).forEach(propName => {
         if (propName === "children") {
             return;
-        } else if (propName === "className") {
+        } 
+        else if (propName === "className"||propName.toLocaleLowerCase()==='class') {
             return classOps.attach(node,props[propName])
-        } else if (propName === "style") {
+        } 
+        else if (propName === "style") {
             return styleOps.attach(node, props[propName]);
-        } else if (isEventName(propName)) {
+        } 
+        else if (isEventName(propName)) {
             return addEventHandler(node, propName, props[propName]);
         }
-        else if(node.tagName==='TEXTAREA'&&node[propName]==='value'||'defaultValue'){
+        else if(node.tagName==='TEXTAREA'&&(node[propName]==='value'||'defaultValue')){
             return textareaSpec.attachAttr(node,propName,props[propName])
         }
-        node.setAttribute(propName, props[propName]);
+        else if(isFunction(props[propName])){
+            return
+        }
+        node.setAttribute(customizePropName(propName), props[propName]);
     });
 }
 
@@ -58,17 +72,24 @@ export function removeAttr(node, propName) {
 export function updateAttr(node, name, value, preValue) {
     if (name === "children") {
         return;
-    } else if (name === "style") {
+    } 
+    else if (name === "style") {
         return styleOps.update(node, value, preValue);
-    } else if (name === "className") {
+    } 
+    else if (name === "className"||name.toLocaleLowerCase()==='class') {
         return classOps.attach(node,value)
-    } else if (isEventName) {
+    } 
+    else if (isEventName(name)) {
         removeEventHandler(node,name)
         return addEventHandler(node, name, value);
-    }else if(node.tagName==='TEXTAREA'&&node[propName]==='value'||'defaultValue'){
+    }
+    else if(node.tagName==='TEXTAREA'&&(node[propName]==='value'||'defaultValue')){
         return textareaSpec.attachAttr(node,name,props.value)
     }
-    node.setAttribute(name, value);
+    else if(isFunction(value)){
+        return node.removeAttribute(name)
+    }
+    node.setAttribute(customizePropName(name), value);
 }
 
 const classOps={
