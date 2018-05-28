@@ -3,7 +3,7 @@ import {isNotNullOrUndefined,isFunction} from './utils'
 import {textareaSpec} from './specific'
 
 function customizePropName (propName){
-    const interalAtrr=['tabindex','spellcheck','dropzone','contextmenu','contenteditable','accesskey']
+    const interalAtrr=['tabindex','spellcheck','dropzone','contextmenu','contenteditable','accesskey','size']
     if(interalAtrr.includes(propName.toLocaleLowerCase()) ){
         return propName
     }
