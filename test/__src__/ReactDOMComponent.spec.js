@@ -173,7 +173,7 @@ describe('ReactComponent', () => {
 
       React.render(<div whatever={null} />, container);
 
-      expect(container.firstChild.hasAttribute('whatever')).toBe(true);
+      expect(container.firstChild.hasAttribute('whatever')).toBe(false);
     });
 
     it('assigns a numeric custom attributes as a string', function() {

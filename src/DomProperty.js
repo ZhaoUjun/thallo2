@@ -19,7 +19,7 @@ function customizePropName(propName) {
         "accesskey",
         "size"
     ];
-    if (interalAtrr.includes(propName.toLocaleLowerCase())) {
+    if (interalAttrs.includes(propName.toLocaleLowerCase())) {
         return propName;
     }
     return calmalName(propName);

@@ -15,13 +15,13 @@ module.exports = function(config) {
 
 
     // list of files / patterns to load in the browser
-    // files: [
-    //   'test/**/*spec.js',
-    //   'test/**/*spec.jsx',
-    // ],
     files: [
-      'test/**/CSSPropertyOperations.spec.js',
+      'test/**/*spec.js',
+      'test/**/*spec.jsx',
     ],
+    // files: [
+    //   'test/**/CSSPropertyOperations.spec.js',
+    // ],
 
 
     // list of files / patterns to exclude
