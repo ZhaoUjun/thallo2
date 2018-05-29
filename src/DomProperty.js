@@ -1,7 +1,13 @@
 import { isEventName, addEventHandler, removeEventHandler } from "./event";
-import { isNotNullOrUndefined, isFunction, isBoolean, isSymbol, isNumber } from "./utils";
+import {
+    isNotNullOrUndefined,
+    isFunction,
+    isBoolean,
+    isSymbol,
+    isNumber
+} from "./utils";
 import { textareaSpec } from "./specific";
-import {cssPropsWithSize} from './constant'
+import { cssPropsWithSize } from "./constant";
 
 function customizePropName(propName) {
     const interalAtrr = [
@@ -19,52 +25,52 @@ function customizePropName(propName) {
     return calmalName(propName);
 }
 
-function processStyleName(name){
-    const exclude=[
-        'translateX','translateY','translateZ'
-    ];
+function processStyleName(name) {
+    const exclude = ["translateX", "translateY", "translateZ"];
     if (interalAtrr.includes(name)) {
         return name;
     }
-    return calmalName(name)
-
+    return calmalName(name);
 }
 
-function calmalName(name){
+function calmalName(name) {
     return name.replace(/[A-Z]/g, val => "-" + val.toLocaleLowerCase());
 }
 
-function autoAppendPx(name,val){
-    if(isNumber(val)&&val>0){
-        return cssPropsWithSize.includes(name)? val+'px':val
+function autoAppendPx(name, val) {
+    if (isNumber(val) && val > 0) {
+        return cssPropsWithSize.includes(name) ? val + "px" : val;
     }
-    return String(val).trim()
+    return String(val).trim();
 }
 
-function venderPrefixed(styleName){
-    return styleName.replace(/^(Moz|ms)[A-Z]/,val=>{
-        const index=val.length===4?3:2
-        return '-'+val.slice(0,index).toLocaleLowerCase()+'-'+val.slice(index).toLocaleLowerCase()
-    })
+function venderPrefixed(styleName) {
+    return styleName.replace(/^(Moz|ms)[A-Z]/, val => {
+        const index = val.length === 4 ? 3 : 2;
+        return (
+            "-" +
+            val.slice(0, index).toLocaleLowerCase() +
+            "-" +
+            val.slice(index).toLocaleLowerCase()
+        );
+    });
 }
 
-function processStyle(style,styleName,val){
-    style[venderPrefixed(styleName)] = autoAppendPx(styleName,val)
+function processStyle(style, styleName, val) {
+    style[venderPrefixed(styleName)] = autoAppendPx(styleName, val);
 }
-
-
 
 const styleOps = {
     attach: (node, styles) => {
         const { style } = node;
         for (let styleName in styles) {
-            processStyle(style,styleName,styles[styleName])
+            processStyle(style, styleName, styles[styleName]);
         }
     },
     update: (node, nextStyles, preStyles) => {
         const { style } = node;
         for (let styleName in nextStyles) {
-            processStyle(style,styleName,styles[styleName])
+            processStyle(style, styleName, styles[styleName]);
         }
         for (let styleName in preStyles) {
             if (!nextStyles.hasOwnProperty(styleName)) {
@@ -79,12 +85,6 @@ const styleOps = {
         }
     }
 };
-
-function parseStyle(styleObj) {
-    return Object.keys(styleObj).reduce((acc, key) => {
-        return acc + key + ":" + styleObj[key] + ";";
-    }, "");
-}
 
 export function attachAttributes(node, props) {
     Object.keys(props).forEach(propName => {
