@@ -25,14 +25,6 @@ function customizePropName(propName) {
     return calmalName(propName);
 }
 
-function processStyleName(name) {
-    const exclude = ["translateX", "translateY", "translateZ"];
-    if (interalAtrr.includes(name)) {
-        return name;
-    }
-    return calmalName(name);
-}
-
 function calmalName(name) {
     return name.replace(/[A-Z]/g, val => "-" + val.toLocaleLowerCase());
 }
