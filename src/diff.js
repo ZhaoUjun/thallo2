@@ -1,33 +1,47 @@
 import { createDomNode } from "./createDomNode";
 import { NODE_TAG } from "./constant";
 import { reRenderComponent } from "./life-cycle/reRenderComponent";
-import { isSameNode, isNotNullOrUndefined, isString,isIterator} from "./utils";
+import {
+    isSameNode,
+    isNotNullOrUndefined,
+    isString,
+    isIterator
+} from "./utils";
 import { updateAttr, removeAttr } from "./DomProperty";
 import Ref from "./Ref";
 import { unmount } from "./life-cycle/unmountComponent";
 
-export default function diff(preVNode, nextVNode, prarentDom,parentContext,isSvg) {
+export default function diff(
+    preVNode,
+    nextVNode,
+    prarentDom,
+    parentContext,
+    isSvg
+) {
     let dom = window.document.createTextNode("");
-    
+
     // prarentDom=prarentDom||preVNode.dom.parentNode;
     if (isSameNode(preVNode, nextVNode)) {
         if (nextVNode.tag & NODE_TAG.NORMAL_COMPONENT) {
-            dom = reRenderComponent(preVNode, nextVNode,parentContext);
+            dom = reRenderComponent(preVNode, nextVNode, parentContext);
         } else if (nextVNode.tag & NODE_TAG.STATELESS) {
-            dom = reRenderStateLess(preVNode, nextVNode, prarentDom,parentContext);
+            dom = reRenderStateLess(
+                preVNode,
+                nextVNode,
+                prarentDom,
+                parentContext
+            );
         } else if (nextVNode.tag & NODE_TAG.NODE) {
-            dom = diffHostNode(preVNode, nextVNode, parentContext,isSvg);
-        } else if(nextVNode.tag&NODE_TAG.TEXT){
+            dom = diffHostNode(preVNode, nextVNode, parentContext, isSvg);
+        } else if (nextVNode.tag & NODE_TAG.TEXT) {
             preVNode.unmount(prarentDom);
-            dom = createDomNode(nextVNode,parentContext);
+            dom = createDomNode(nextVNode, parentContext);
             prarentDom.appendChild(dom);
         }
     } else {
-        dom = createDomNode(nextVNode,parentContext);
-        prarentDom.appendChild(dom);        
-        preVNode.unmount(prarentDom);  
-         
-        
+        dom = createDomNode(nextVNode, parentContext);
+        prarentDom.appendChild(dom);
+        preVNode.unmount(prarentDom);
     }
     return dom;
 }
@@ -50,33 +64,37 @@ export function patchAttr(preVNode, nextVnode, isSvg) {
     }
 }
 
-function reRenderStateLess(preVNode, nextVnode, prarentDom,parentContext) {
+function reRenderStateLess(preVNode, nextVnode, prarentDom, parentContext) {
     const { props, type } = nextVnode;
     const rendered = (nextVnode._rendered = type(props));
-    return diff(preVNode._rendered, rendered, prarentDom,parentContext);
+    return diff(preVNode._rendered, rendered, prarentDom, parentContext);
 }
 
-function diffHostNode(preVNode, nextVNode, parentContext,isSvg) {
-    function switchToArray(children){
-        return children?isIterator(children)?Array.from(children):[children]:[]
+function diffHostNode(preVNode, nextVNode, parentContext, isSvg) {
+    function switchToArray(children) {
+        return children
+            ? isIterator(children)
+                ? Array.from(children)
+                : [children]
+            : [];
     }
     const dom = preVNode.dom;
     diffAttributes(preVNode, nextVNode, isSvg);
     diffChildren(
         dom,
-        switchToArray(preVNode.props.children) ,
-        switchToArray( nextVNode.props.children),
+        switchToArray(preVNode.props.children),
+        switchToArray(nextVNode.props.children),
         parentContext,
-        isSvg,
+        isSvg
     );
     if (nextVNode.ref !== null) {
         Ref.update(preVNode, nextVNode, dom);
     }
-    return nextVNode.dom=dom;
+    return (nextVNode.dom = dom);
 }
 
 //snabbdom https://github.com/snabbdom/snabbdom
-function diffChildren(parentElm, oldCh, newCh,parentContext,isSvg) {
+function diffChildren(parentElm, oldCh, newCh, parentContext, isSvg) {
     let oldStartIdx = 0,
         newStartIdx = 0;
     let oldEndIdx = oldCh.length - 1;
@@ -99,22 +117,25 @@ function diffChildren(parentElm, oldCh, newCh,parentContext,isSvg) {
         } else if (newEndVnode == null) {
             newEndVnode = newCh[--newEndIdx];
         } else if (isSameNode(oldStartVnode, newStartVnode)) {
-            diff(oldStartVnode, newStartVnode, parentElm,parentContext);
+            diff(oldStartVnode, newStartVnode, parentElm, parentContext);
             oldStartVnode = oldCh[++oldStartIdx];
             newStartVnode = newCh[++newStartIdx];
         } else if (isSameNode(oldEndVnode, newEndVnode)) {
-            diff(oldEndVnode, newEndVnode, parentElm,parentContext);
+            diff(oldEndVnode, newEndVnode, parentElm, parentContext);
             oldEndVnode = oldCh[--oldEndIdx];
             newEndVnode = newCh[--newEndIdx];
         } else if (isSameNode(oldStartVnode, newEndVnode)) {
             // Vnode moved right
-            diff(oldStartVnode, newEndVnode, parentElm,parentContext);
-            parentElm.insertBefore(oldStartVnode.dom, oldEndVnode.dom.nextSibling);
+            diff(oldStartVnode, newEndVnode, parentElm, parentContext);
+            parentElm.insertBefore(
+                oldStartVnode.dom,
+                oldEndVnode.dom.nextSibling
+            );
             oldStartVnode = oldCh[++oldStartIdx];
             newEndVnode = newCh[--newEndIdx];
         } else if (isSameNode(oldEndVnode, newStartVnode)) {
             // Vnode moved left
-            diff(oldEndVnode, newEndVnode, parentElm,parentContext);
+            diff(oldEndVnode, newEndVnode, parentElm, parentContext);
             parentElm.insertBefore(oldEndVnode.dom, oldStartVnode.dom);
             oldEndVnode = oldCh[--oldEndIdx];
             newStartVnode = newCh[++newStartIdx];
@@ -126,7 +147,7 @@ function diffChildren(parentElm, oldCh, newCh,parentContext,isSvg) {
             if (!isNotNullOrUndefined(idxInOld)) {
                 // New element
                 parentElm.insertBefore(
-                    createDomNode(newStartVnode,parentContext),
+                    createDomNode(newStartVnode, parentContext),
                     oldStartVnode.dom
                 );
                 newStartVnode = newCh[++newStartIdx];
@@ -134,11 +155,11 @@ function diffChildren(parentElm, oldCh, newCh,parentContext,isSvg) {
                 elmToMove = oldCh[idxInOld];
                 if (elmToMove.type !== newStartVnode.type) {
                     parentElm.insertBefore(
-                        createDomNode(newStartVnode,parentContext),
+                        createDomNode(newStartVnode, parentContext),
                         oldStartVnode.dom
                     );
                 } else {
-                    diff(elmToMove, newStartVnode,parentElm,parentContext);
+                    diff(elmToMove, newStartVnode, parentElm, parentContext);
                     oldCh[idxInOld] = undefined;
                     parentElm.insertBefore(elmToMove.dom, oldStartVnode.dom);
                 }
@@ -150,13 +171,20 @@ function diffChildren(parentElm, oldCh, newCh,parentContext,isSvg) {
         if (oldStartIdx > oldEndIdx) {
             before =
                 newCh[newEndIdx + 1] == null ? null : newCh[newEndIdx + 1].dom;
-            addVnodes(parentElm, before, newCh, newStartIdx, newEndIdx,parentContext);
+            addVnodes(
+                parentElm,
+                before,
+                newCh,
+                newStartIdx,
+                newEndIdx,
+                parentContext
+            );
         } else {
             removeVnodes(parentElm, oldCh, oldStartIdx, oldEndIdx);
         }
     }
 }
-function addVnodes(parentElm, before, vnodes, startIdx, endIdx,parentContext) {
+function addVnodes(parentElm, before, vnodes, startIdx, endIdx, parentContext) {
     for (; startIdx <= endIdx; ++startIdx) {
         const ch = vnodes[startIdx];
         if (ch != null) {

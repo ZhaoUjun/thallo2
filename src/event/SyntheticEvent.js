@@ -44,16 +44,16 @@ export class SyntheticEvent {
         this._isPersisted = true;
     }
 
-    stopImmediatePropagation () {
+    stopImmediatePropagation() {
         this.stopPropagation();
         this.stopImmediate = true;
     }
 
-    toString () {
+    toString() {
         return "[object Event]";
     }
 
-    nullify(){
+    nullify() {
         this.type = null;
         this.target = null;
         this.nativeEvent = null;

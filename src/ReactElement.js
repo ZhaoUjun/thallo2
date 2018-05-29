@@ -68,7 +68,7 @@ function mergeProps(type, props = {}, children) {
     const newProps =
         children.length > 0
             ? {
-                  children:children.length===1?children[0]:children,
+                  children: children.length === 1 ? children[0] : children,
                   owner: CurrentOwner.current
               }
             : { owner: CurrentOwner.current };
@@ -91,10 +91,10 @@ function mergeProps(type, props = {}, children) {
 }
 
 export function createElement(type, props, ...args) {
-    if(type==='comment'){
-        console.log(type)
+    if (type === "comment") {
+        console.log(type);
     }
-    if(type===null){
+    if (type === null) {
         return new TextNode(type);
     }
     props = props || {};
@@ -108,8 +108,8 @@ export function createFactory(type) {
 }
 
 export function cloneElement(element, config, ...children) {
-    config=config||{}
- 
+    config = config || {};
+
     if (isArray(element)) {
         element = element[0];
     }
@@ -128,7 +128,7 @@ export function cloneElement(element, config, ...children) {
     if (children.length > 0) {
         props.children = children;
     }
-    
+
     const newConfig = ref
         ? { ...element, ...config, props, ref, _owner: owner }
         : { ...element, ...config, props };

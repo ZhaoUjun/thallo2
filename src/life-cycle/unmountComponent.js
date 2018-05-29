@@ -13,8 +13,8 @@ import {
 } from "../utils";
 import Ref from "../Ref";
 
-export function unmount(vNode,parentDom){
-    const{tag,}=vNode
+export function unmount(vNode, parentDom) {
+    const { tag } = vNode;
     if (
         tag &
         (NODE_TAG.NORMAL_COMPONENT |
@@ -26,29 +26,26 @@ export function unmount(vNode,parentDom){
     } else if (isIterator(vNode)) {
         // domNode = window.document.createDocumentFragment();
         vNode.forEach(item => {
-            unmount(item,parentDom)
+            unmount(item, parentDom);
         });
     }
 }
 
 export function unmountComponent(vNode, parentDom) {
     const { component, _rendered, dom } = vNode;
-    component._disable=true;
-    if (
-        hasLifeCycle('componentWillUnmount',component)
-    ) {
-        try{
+    component._disable = true;
+    if (hasLifeCycle("componentWillUnmount", component)) {
+        try {
             component.componentWillUnmount();
+        } catch (err) {
+            throw err;
         }
-        catch(err){
-            throw err
-        }
-    };
+    }
     _rendered.unmount();
     removeDom(vNode, parentDom);
 }
 
-export function unmountStateLessComponent(vNode,parentDom){
+export function unmountStateLessComponent(vNode, parentDom) {
     const { _rendered, dom } = vNode;
     _rendered.unmount();
     removeDom(vNode, parentDom);
@@ -77,11 +74,10 @@ function removeDom(vNode, parentDom) {
         Ref.detach(vNode, ref, dom);
     }
     if (dom && parentDom) {
-        try{
+        try {
             parentDom.removeChild(dom);
-        }
-        catch(err){
-            parentDom.innerHTML='';
+        } catch (err) {
+            parentDom.innerHTML = "";
         }
     }
 }
@@ -90,18 +86,20 @@ export function unmountTree(containerDom) {
     const vNode = containerDom._reactRootContainer;
     if (vNode) {
         vNode.unmount(containerDom);
-        delete containerDom._reactRootContainer
-        return true
-    } else {    
+        delete containerDom._reactRootContainer;
+        return true;
+    } else {
         containerDom.innerHtml = "";
-        delete containerDom._reactRootContainer        
-        return false
+        delete containerDom._reactRootContainer;
+        return false;
     }
 }
 
-export function unmountComponentAtNode(containerDom){
-    if(!isValidContainer(containerDom)){
-        throw  new Error('unmountComponentAtNode(...): Target container is not a DOM element.')
+export function unmountComponentAtNode(containerDom) {
+    if (!isValidContainer(containerDom)) {
+        throw new Error(
+            "unmountComponentAtNode(...): Target container is not a DOM element."
+        );
     }
-    return unmountTree(containerDom)
+    return unmountTree(containerDom);
 }

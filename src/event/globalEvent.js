@@ -26,13 +26,13 @@ const globalListner = function(e) {
         }
         target = target.parentNode;
     }
-    if(syntheticEvent&&!syntheticEvent._isPersisted){
+    if (syntheticEvent && !syntheticEvent._isPersisted) {
         /**
          * it will be nullify after in the end of this tick
          *  https://reactjs.org/docs/events.html#ui-events
          */
-      
-        syntheticEvent.nullify()
+
+        syntheticEvent.nullify();
     }
 };
 
@@ -43,7 +43,7 @@ export const globalEvent = {
             eventCount[name] = 0;
             document.addEventListener(name, globalListner);
         } else {
-            handlers = globalEventCollects.get(dom)||Object.create(null);
+            handlers = globalEventCollects.get(dom) || Object.create(null);
         }
         handlers[name] = handler;
         eventCount[name]++;

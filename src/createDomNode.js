@@ -5,11 +5,11 @@ import Ref from "./Ref";
 
 export function createDomNode(
     vNode,
-    parentContext={},
+    parentContext = {},
     parentComponent,
     isSvg = false
 ) {
-    const  tag  = vNode&&vNode.tag;
+    const tag = vNode && vNode.tag;
     let domNode;
     if (
         tag &
@@ -24,10 +24,12 @@ export function createDomNode(
     } else if (isIterator(vNode)) {
         domNode = window.document.createDocumentFragment();
         vNode.forEach(item => {
-            domNode.appendChild(createDomNode(item,parentContext,parentComponent));
+            domNode.appendChild(
+                createDomNode(item, parentContext, parentComponent)
+            );
         });
-    }else{
-        domNode = window.document.createTextNode('');
+    } else {
+        domNode = window.document.createTextNode("");
     }
     return domNode;
 }
@@ -50,7 +52,7 @@ export function mountVNode(vNode, parentContext, parentComponent, isSvg) {
     return dom;
 }
 
-export function mountTextNode(vNode, parentContext, parentComponent, isSvg){
+export function mountTextNode(vNode, parentContext, parentComponent, isSvg) {
     const textNode = (vNode.dom = window.document.createTextNode(this.text));
 
     return textNode;

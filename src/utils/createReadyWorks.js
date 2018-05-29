@@ -48,7 +48,6 @@ export function createReadyWorks() {
                 flushRef(previous, current);
                 flushPenddingCallback(current);
             }
-            
         }
     };
 }
