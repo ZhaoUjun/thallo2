@@ -892,7 +892,7 @@ describe('ReactCompositeComponent', () => {
           propChanges++;
         }
 
-        if (nextContext !== this.context) {
+        if (nextContext !== this.context) {``
           contextChanges++;
         }
       }

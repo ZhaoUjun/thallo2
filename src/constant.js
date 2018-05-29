@@ -23,3 +23,11 @@ export const REACT_ELEMENT_TYPE =
         Symbol.for &&
         Symbol.for("react.element")) ||
     0xeac7;
+
+export const cssPropsWithSize=[
+    'left','right','top','bottom',
+    'padding','paddingLeft','paddingRight','paddingTop','paddingBottom',
+    'margin','marginLeft','marginRight','marginTop','marginBottom',
+    'fontSize','textIndent',
+    'translate','translateX','translateY','translateZ',
+]

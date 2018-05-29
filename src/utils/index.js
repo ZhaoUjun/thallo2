@@ -8,6 +8,14 @@ export function isString(string) {
     return typeof string === "string";
 }
 
+export function isSymbol(obj){
+    return Object.prototype.toString.call(obj)==="[object Symbol]"
+}
+
+export function isBoolean(obj){
+    return Object.prototype.toString.call(obj)==="[object Boolean]"
+}
+
 export function isNumber(num) {
     return typeof num === 'number';
 }

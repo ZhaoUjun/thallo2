@@ -2,7 +2,10 @@ import React from "../../src/React";
 import {renderIntoDocument,Simulate} from '../utils'
 
 describe('React', () => {
-
+  afterAll(()=>{
+    const body =document.getElementsByTagName('body')[0];
+    body.innerHTML=''
+  })
 
   it('allows a DOM element to be used with a string', () => {
     var element = React.createElement('div', {className: 'foo'});

@@ -26,7 +26,7 @@ const globalListner = function(e) {
         }
         target = target.parentNode;
     }
-    if(!syntheticEvent._isPersisted){
+    if(syntheticEvent&&!syntheticEvent._isPersisted){
         /**
          * it will be nullify after in the end of this tick
          *  https://reactjs.org/docs/events.html#ui-events
