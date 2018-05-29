@@ -10,7 +10,7 @@ import { textareaSpec } from "./specific";
 import { cssPropsWithSize } from "./constant";
 
 function customizePropName(propName) {
-    const interalAtrr = [
+    const interalAttrs = [
         "tabindex",
         "spellcheck",
         "dropzone",
