@@ -9,6 +9,18 @@ import {
 import { textareaSpec } from "./specific";
 import { cssPropsWithSize } from "./constant";
 
+const booleanAttrs=[
+    'disabled',
+]
+const allowBoobeanAttrs=[
+    'spellCheck'
+]
+const excludeAttrs=[
+    'children',
+    'ref',
+    'owner'    
+]
+
 function customizePropName(propName) {
     const interalAttrs = [
         "tabindex",
@@ -80,26 +92,7 @@ const styleOps = {
 
 export function attachAttributes(node, props) {
     Object.keys(props).forEach(propName => {
-        if (propName === "children") {
-            return;
-        } else if (
-            propName === "className" ||
-            propName.toLocaleLowerCase() === "class"
-        ) {
-            return classOps.attach(node, props[propName]);
-        } else if (propName === "style") {
-            return styleOps.attach(node, props[propName]);
-        } else if (isEventName(propName)) {
-            return addEventHandler(node, propName, props[propName]);
-        } else if (
-            node.tagName === "TEXTAREA" &&
-            (node[propName] === "value" || "defaultValue")
-        ) {
-            return textareaSpec.attachAttr(node, propName, props[propName]);
-        } else if (isFunction(props[propName])) {
-            return;
-        }
-        node.setAttribute(customizePropName(propName), props[propName]);
+        updateAttr(node,propName,props[propName],null,false)
     });
 }
 
@@ -107,37 +100,54 @@ export function removeAttr(node, propName) {
     node.removeAttribute(propName);
 }
 
-export function updateAttr(node, name, value, preValue) {
-    if (name === "children") {
-        return;
+export function updateAttr(node, name, value, preValue,isUpdate=true) {
+    if (excludeAttrs.includes(name)) {
+        return
     } else if (name === "style") {
-        return styleOps.update(node, value, preValue);
+        return isUpdate?styleOps.update(node, value, preValue)
+                :styleOps.attach(node, value);
     } else if (name === "className" || name.toLocaleLowerCase() === "class") {
         return classOps.attach(node, value);
     } else if (isEventName(name)) {
-        removeEventHandler(node, name);
+        if(value===preValue){
+            return
+        }else if(isUpdate){
+            removeEventHandler(node, name);
+        }
         return addEventHandler(node, name, value);
     } else if (
-        node.tagName === "TEXTAREA" &&
-        (node[propName] === "value" || "defaultValue")
+        (isFunction(value)&&!isUpdate)
     ) {
-        return textareaSpec.attachAttr(node, name, props.value);
+        return void 0;
+    }else if (
+        node.tagName === "TEXTAREA" &&
+        (name === "value" || "defaultValue")
+    ) {
+        return textareaSpec.attachAttr(node, name, value);
+    }else if(booleanAttrs.includes(name.toLocaleLowerCase())){
+        return value?node.setAttribute(name,''):node.removeAttribute(name)
     } else if (
         isFunction(value) ||
         !isNotNullOrUndefined(value) ||
-        isBoolean(value) ||
         isSymbol(value)
     ) {
-        return node.removeAttribute(name);
+        return  node.removeAttribute(name)
+    }
+    else if (
+        isBoolean(value)
+    ) {
+        return  !value||isUpdate?node.removeAttribute(name):node.setAttribute(name,value)
     }
     node.setAttribute(customizePropName(name), value);
 }
 
 const classOps = {
     attach: function(node, value) {
-        return node.setAttribute(
-            "class",
-            isNotNullOrUndefined(value) ? value : ""
-        );
+        if(isNotNullOrUndefined(value)){
+            node.setAttribute('class',value);
+        }
+        else{
+            removeAttr(node,'class')
+        }
     }
 };

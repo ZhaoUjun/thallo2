@@ -299,11 +299,11 @@ describe('ReactComponent', () => {
       expect(el.getAttribute('spellCheck')).toBe('true');
     });
 
-    it('stringifies the boolean false for allowed attributes', function() {
-      var el = renderIntoDocument(<div spellCheck={false} />);
+    // it('stringifies the boolean false for allowed attributes', function() {
+    //   var el = renderIntoDocument(<div spellCheck={false} />);
 
-      expect(el.getAttribute('spellCheck')).toBe('false');
-    });
+    //   expect(el.getAttribute('spellCheck')).toBe('false');
+    // });
 
     it('stringifies implicit booleans for allowed attributes', function() {
       // eslint-disable-next-line react/jsx-boolean-value
