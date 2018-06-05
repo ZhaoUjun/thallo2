@@ -1,15 +1,15 @@
-import { isComposite, isFunction, isStateless, isString } from "./utils";
+import { isComposite, isFunction, isStateless, isString ,isNotNullOrUndefined} from "./utils";
 import { NODE_TAG } from "./constant";
 
 export default {
     update(lastVnode, nextVnode, domNode) {
-        const prevRef = lastVnode != null && lastVnode.ref;
-        const nextRef = nextVnode != null && nextVnode.ref;
-
-        if (prevRef !== nextRef) {
-            this.detach(lastVnode, prevRef, lastVnode.dom);
-            this.attach(nextVnode, nextRef, domNode);
+        const prevRef = isNotNullOrUndefined(lastVnode)? lastVnode.ref:null;
+        const nextRef = isNotNullOrUndefined(lastVnode)? nextVnode.ref:null;
+        if(prevRef===nextRef){
+            return void 0
         }
+        this.detach(lastVnode, prevRef, lastVnode.dom);
+        this.attach(nextVnode, nextRef, domNode);
     },
     attach(vnode, ref, domNode) {
         // throw ('test')
@@ -39,12 +39,6 @@ export default {
         if (isFunction(ref)) {
             ref(null);
         } else if (isString(ref)) {
-            const inst = vnode._owner;
-            if (inst.refs[ref] === node && isFunction(inst.render)) {
-                delete inst.refs[ref];
-            }
-        }
-        if (isString(ref)) {
             const inst = vnode._owner;
             if (inst.refs[ref] === node && isFunction(inst.render)) {
                 delete inst.refs[ref];
