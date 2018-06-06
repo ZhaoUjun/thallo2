@@ -1,4 +1,4 @@
-import { createDomNode,disposeSpecialHostNode } from "./createDomNode";
+import { createDomNode, disposeSpecialHostNode } from "./createDomNode";
 import { NODE_TAG } from "./constant";
 import { reRenderComponent } from "./life-cycle/reRenderComponent";
 import {
@@ -90,7 +90,7 @@ function diffHostNode(preVNode, nextVNode, parentContext, isSvg) {
     if (nextVNode.ref !== null) {
         Ref.update(preVNode, nextVNode, dom);
     }
-    disposeSpecialHostNode(nextVNode,dom,true)
+    disposeSpecialHostNode(nextVNode, dom, true);
     return (nextVNode.dom = dom);
 }
 

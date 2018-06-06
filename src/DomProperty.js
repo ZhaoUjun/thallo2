@@ -10,17 +10,9 @@ import {
 import { textareaSpec } from "./specific";
 import { cssPropsWithSize } from "./constant";
 
-const booleanAttrs=[
-    'disabled',
-]
-const allowBoobeanAttrs=[
-    'spellCheck'
-]
-const excludeAttrs=[
-    'children',
-    'ref',
-    'owner'    
-]
+const booleanAttrs = ["disabled"];
+const allowBoobeanAttrs = ["spellCheck"];
+const excludeAttrs = ["children", "ref", "owner"];
 
 function customizePropName(propName) {
     const interalAttrs = [
@@ -95,7 +87,7 @@ const styleOps = {
 
 export function attachAttributes(node, props) {
     Object.keys(props).forEach(propName => {
-        updateAttr(node,propName,props[propName],null,false)
+        updateAttr(node, propName, props[propName], null, false);
     });
 }
 
@@ -103,54 +95,51 @@ export function removeAttr(node, propName) {
     node.removeAttribute(propName);
 }
 
-export function updateAttr(node, name, value, preValue,isUpdate=true) {
+export function updateAttr(node, name, value, preValue, isUpdate = true) {
     if (excludeAttrs.includes(name)) {
-        return
+        return;
     } else if (name === "style") {
-        return isUpdate?styleOps.update(node, value, preValue)
-                :styleOps.attach(node, value);
+        return isUpdate
+            ? styleOps.update(node, value, preValue)
+            : styleOps.attach(node, value);
     } else if (name === "className" || name.toLocaleLowerCase() === "class") {
         return classOps.attach(node, value);
     } else if (isEventName(name)) {
-        if(value===preValue){
-            return
-        }else if(isUpdate){
+        if (value === preValue) {
+            return;
+        } else if (isUpdate) {
             removeEventHandler(node, name);
         }
         return addEventHandler(node, name, value);
-    } else if (
-        (isFunction(value)&&!isUpdate)
-    ) {
+    } else if (isFunction(value) && !isUpdate) {
         return void 0;
-    }else if (
+    } else if (
         node.tagName === "TEXTAREA" &&
         (name === "value" || "defaultValue")
     ) {
         return textareaSpec.attachAttr(node, name, value);
-    }else if(booleanAttrs.includes(name.toLocaleLowerCase())){
-        return value?node.setAttribute(name,''):node.removeAttribute(name)
+    } else if (booleanAttrs.includes(name.toLocaleLowerCase())) {
+        return value ? node.setAttribute(name, "") : node.removeAttribute(name);
     } else if (
         isFunction(value) ||
         !isNotNullOrUndefined(value) ||
         isSymbol(value)
     ) {
-        return  node.removeAttribute(name)
-    }
-    else if (
-        isBoolean(value)
-    ) {
-        return  !value||isUpdate?node.removeAttribute(name):node.setAttribute(name,value)
+        return node.removeAttribute(name);
+    } else if (isBoolean(value)) {
+        return !value || isUpdate
+            ? node.removeAttribute(name)
+            : node.setAttribute(name, value);
     }
     node.setAttribute(customizePropName(name), value);
 }
 
 const classOps = {
     attach: function(node, value) {
-        if(isNotNullOrUndefined(value)){
-            node.setAttribute('class',value);
-        }
-        else{
-            removeAttr(node,'class')
+        if (isNotNullOrUndefined(value)) {
+            node.setAttribute("class", value);
+        } else {
+            removeAttr(node, "class");
         }
     }
 };

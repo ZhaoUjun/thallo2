@@ -1,12 +1,18 @@
-import { isComposite, isFunction, isStateless, isString ,isNotNullOrUndefined} from "./utils";
+import {
+    isComposite,
+    isFunction,
+    isStateless,
+    isString,
+    isNotNullOrUndefined
+} from "./utils";
 import { NODE_TAG } from "./constant";
 
 export default {
     update(lastVnode, nextVnode, domNode) {
-        const prevRef = isNotNullOrUndefined(lastVnode)? lastVnode.ref:null;
-        const nextRef = isNotNullOrUndefined(lastVnode)? nextVnode.ref:null;
-        if(prevRef===nextRef){
-            return void 0
+        const prevRef = isNotNullOrUndefined(lastVnode) ? lastVnode.ref : null;
+        const nextRef = isNotNullOrUndefined(lastVnode) ? nextVnode.ref : null;
+        if (prevRef === nextRef) {
+            return void 0;
         }
         this.detach(lastVnode, prevRef, lastVnode.dom);
         this.attach(nextVnode, nextRef, domNode);
@@ -21,13 +27,13 @@ export default {
                 vnode &&
                 vnode.parentVNode &&
                 vnode.parentVNode.tag & NODE_TAG.STATELESS
-            ) {
+            ) {``
                 console.warn("statelessComponent do not support refs");
                 return;
             }
             const inst = vnode._owner;
-            if(inst===null){
-                throw new Error('cannot supply a ref outside of render method')
+            if (inst === null) {
+                throw new Error("cannot supply a ref outside of render method");
             }
             if (inst && isFunction(inst.render)) {
                 inst.refs[ref] = node;
