@@ -20,7 +20,7 @@ module.exports = function(config) {
       'test/**/*spec.jsx',
     ],
     // files: [
-    //   'test/**/DOMPropertyOperations.spec.js',
+    //   'test/**/ReactDOMSelect.spec.js',
     // ],
 
 

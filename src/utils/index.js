@@ -17,6 +17,10 @@ export function isSymbol(obj) {
     return Object.prototype.toString.call(obj) === "[object Symbol]";
 }
 
+export function isPlainObj(obj) {
+    return Object.prototype.toString.call(obj) === "[object Object]";
+}
+
 export function isBoolean(obj) {
     return Object.prototype.toString.call(obj) === "[object Boolean]";
 }

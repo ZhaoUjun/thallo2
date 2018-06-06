@@ -4,7 +4,8 @@ import {
     isFunction,
     isBoolean,
     isSymbol,
-    isNumber
+    isNumber,
+    isPlainObj
 } from "./utils";
 import { textareaSpec } from "./specific";
 import { cssPropsWithSize } from "./constant";
@@ -29,7 +30,9 @@ function customizePropName(propName) {
         "contextmenu",
         "contenteditable",
         "accesskey",
-        "size"
+        "size",
+        "defaultvalue",
+        "autofocus"
     ];
     if (interalAttrs.includes(propName.toLocaleLowerCase())) {
         return propName;

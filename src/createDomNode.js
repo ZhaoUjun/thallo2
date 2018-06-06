@@ -1,5 +1,5 @@
 import { NODE_TAG } from "./constant";
-import { getChildrenfromProps, isString, isNumber, isIterator } from "./utils";
+import { getChildrenfromProps, isString, isNumber, isIterator,isArray } from "./utils";
 import { attachAttributes } from "./DomProperty";
 import Ref from "./Ref";
 
@@ -49,6 +49,7 @@ export function mountVNode(vNode, parentContext, parentComponent, isSvg) {
     if (ref) {
         Ref.attach(vNode, ref, dom);
     }
+    disposeSpecialHostNode(vNode,dom)            
     return dom;
 }
 
@@ -56,4 +57,36 @@ export function mountTextNode(vNode, parentContext, parentComponent, isSvg) {
     const textNode = (vNode.dom = window.document.createTextNode(this.text));
 
     return textNode;
+}
+
+export function disposeSpecialHostNode(vNode,dom,isUpdate=false){
+    const {type}=vNode;
+    const nodes={
+        'select':function(){
+            const { value, multiple,defaultValue,_actualInitValue } = vNode.props;
+            if(isUpdate
+                &&( 
+                    typeof defaultValue!=='undefined'
+                    &&typeof _actualInitValue==='undefined'
+                    // &&(multiple&&!dom.multiple)
+                )
+            ){
+                //仅defaultValue 更新时，不需要更新value
+                return
+            }
+            if(typeof value !== 'undefined') {
+                if(value===dom.value){
+                    return
+                }
+                const options=[...dom.options];
+                let option;
+                while(option=options.pop()){
+                    option.selected =isArray(value)?
+                        value.includes(option.value)
+                        :option.value===value;
+                }
+            }
+        }
+    }
+    return nodes[type]&&nodes[type].call()
 }
