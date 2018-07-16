@@ -1,15 +1,13 @@
 {
     "extends": [
         "airbnb-base",
+        "plugin:react/recommended",
         "prettier"
     ],
-    "globals": {
-        "wx": true,
-        "getApp": true,
-        "App":true,
-        "Component":true,
-        "getCurrentPages":true,
-        "Page":true
+    "parser": "babel-eslint",
+    "globals":{
+        "window":true,
+        "document":true
     },
     "rules": {
         "arrow-body-style": "off",
@@ -34,6 +32,18 @@
         "no-tabs":"off",
         "prefer-promise-reject-errors":"off",
         "no-mixed-spaces-and-tabs":"off",
-        "no-bitwise":"off"
+        "no-bitwise":"off",
+        "linebreak-style":"off",
+        "prefer-template":"off",
+        "no-unused-vars":"off",
+        "prefer-destructuring":"off",
+        "no-cond-assign":"off",
+        "new-cap":"off",
+        "no-void":"off",
+        "guard-for-in":"off",
+        "no-nested-ternary":"off",
+        "no-prototype-builtins":"off",
+        "react/prop-types":"off",
+        "react/no-string-refs":"off"
     }
 }
