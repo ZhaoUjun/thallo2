@@ -36,7 +36,7 @@
         "linebreak-style":"off",
         "prefer-template":"off",
         "no-unused-vars":"off",
-        "prefer-destructuring":"off",
+        "prefer-destructuring":"warn",
         "no-cond-assign":"off",
         "new-cap":"off",
         "no-void":"off",
