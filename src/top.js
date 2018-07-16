@@ -1,11 +1,11 @@
-import {createReadyWorks} from './utils/createReadyWorks'
+import { createReadyWorks } from "./utils/createReadyWorks";
+
 export const CurrentOwner = {
-    current: null
+	current: null
 };
 
 export const mountedComponents = [];
 
 export const dirtyComponents = [];
 
-export const readyWorks=createReadyWorks();
-
+export const readyWorks = createReadyWorks();

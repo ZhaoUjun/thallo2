@@ -1,7 +1,12 @@
-import {render,findDOMNode} from "./ReactDom";
-import {createElement,createFactory,cloneElement,isValidElement} from "./ReactElement"
-import {Component} from './Component'
-import {unmountComponentAtNode} from './life-cycle/unmountComponent'
+import { render, findDOMNode } from "./ReactDom";
+import {
+	createElement,
+	createFactory,
+	cloneElement,
+	isValidElement
+} from "./ReactElement";
+import { Component } from "./Component";
+import { unmountComponentAtNode } from "./life-cycle/unmountComponent";
 /**
  * Top API (done)
  * Component done
@@ -24,17 +29,15 @@ import {unmountComponentAtNode} from './life-cycle/unmountComponent'
 
  */
 
-const React=window.React=window.reactDom={
-    createElement,
-    render,
-    Component,
-    createFactory,
-    isValidElement,
-    unmountComponentAtNode,
-    findDOMNode,
-    cloneElement
-};
-
-
+const React = (window.React = window.reactDom = {
+	createElement,
+	render,
+	Component,
+	createFactory,
+	isValidElement,
+	unmountComponentAtNode,
+	findDOMNode,
+	cloneElement
+});
 
 export default React;

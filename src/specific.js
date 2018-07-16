@@ -1,7 +1,7 @@
-export const textareaSpec={
-    attachAttr:function(node,propName,value){
-        if(propName==='value'||propName==='defaultValue'){
-            node.value=value;
-        }
-    }
-}
+export const textareaSpec = {
+	attachAttr(node, propName, value) {
+		if (propName === "value" || propName === "defaultValue") {
+			node.value = value;
+		}
+	}
+};
