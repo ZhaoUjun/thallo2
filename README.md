@@ -1,6 +1,6 @@
 # Thallo
 
-thallo 是一个react-like框架，目前主要是调度器是react 15的stackreconcile。
+thallo 是一个react-like框架，目前主要调度器是react 15的stack-reconciler。
 
 ## 进度
 
@@ -24,4 +24,4 @@ thallo 是一个react-like框架，目前主要是调度器是react 15的stackre
  * createPortal
  * createContext
  * createRef
- * error-bandery
+ * Error Boundaries
